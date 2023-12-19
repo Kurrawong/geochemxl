@@ -127,6 +127,18 @@ Most of the tests are for conversion methods in the file `geochemxl/conversion.p
 
 Excel workbooks containing single worksheets with static data for testing are stored in the `tests/data/` directory within this directory. In there too is a complete Workbook with information on every sheet that is used for integration tests within `tests/test_conversion.py`.
 
+== Installation
+
+This package is installed using the https://python-poetry.org/[Poetry] dependency manager.
+
+All the supporting packages needed are given in the `pyproject.toml` file and can be installed into a Python virtual environment like this:
+
+[source]
+----
+~$ poetry init
+~$ poetry update
+----
+
 == Supporting vocabularies
 
 Use of GeochemXL requires the vocabularies used to make the VALIDATION_DICTIONARY, UNITS_OF_MEASURE, LITH_DICTIONARY & MIN_DICTIONARY worksheets to be present. these vocabularies are managed by GSQ's https://gsq-prez.dev.kurrawong.ai/v#geochem-vocabs[Vocabulary Server]. A compounded copy of each template version's vocabs called `combined-concepts` is contained in the `tests/data/` directory and it's used within the testing functions.
