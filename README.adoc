@@ -2,9 +2,19 @@
 
 This is a Python package that can be used either on the command line or within other programs as a library that converts Geochemistry Excel Workbooks into RDF data.
 
-This module requires Workbooks to be structured using templates that are available in the `templates/` directory.
+This module requires Workbooks to be structured using GeochemXL templates.
 
 This package is used by the https://geochem.dev.kurrawong.ai[Geochemistry Data Portal]. Go there to use this without installing anything!
+
+== Code Repository
+
+This software's code repository is online at https://github.com/Kurrawong/geochemxl
+
+== Template versions
+
+This software works with GeochemXL Excel template versions 3+. All supported templates are stored in the `templates/` directory of this software's code repository.
+
+Examples of
 
 == Use
 
@@ -94,9 +104,13 @@ tests/test_utils.py .                                                           
 
 Most of the tests are for conversion methods in the file `geochemxl/conversion.py` and they are in the file `tests/test_conversion.py`. There are a few tests for supporting untilities in `geochemxl/utils.py` in `tests/test_utils.py` too.
 
-=== Test files
+=== Test data files
 
 Excel workbooks containing single worksheets with static data for testing are stored in the `tests/data/` directory within this directory. In there too is a complete Workbook with information on every sheet that is used for integration tests within `tests/test_conversion.py`.
+
+== Supporting vocabularies
+
+Use of GeochemXL requires the vocabularies used to make the VALIDATION_DICTIONARY, UNITS_OF_MEASURE, LITH_DICTIONARY & MIN_DICTIONARY worksheets to be present. these vocabularies are managed by GSQ's https://gsq-prez.dev.kurrawong.ai/v#geochem-vocabs[Vocabulary Server]. A compounded copy of each template version's vocabs called `combined-concepts` is contained in the `tests/data/` directory and it's used within the testing functions.
 
 == Tracking Issues
 

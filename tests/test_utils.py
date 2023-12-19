@@ -1,6 +1,6 @@
 from geochemxl.utils import *
 
-CONCEPTS_COMBINED_GRAPH = Graph().parse(Path(__file__).parent / "data" / "concepts-combined-3.0.ttl")
+CONCEPTS_COMBINED_GRAPH = Graph().parse(Path(__file__).parent / "data" / "3.0" / "concepts-combined-3.0.ttl")
 
 
 def test__get_codelist_id_for_code():
