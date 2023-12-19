@@ -1,0 +1,6 @@
+pyshacl
+jsonschema
+openpyxl
+pydantic
+colorama
+utm

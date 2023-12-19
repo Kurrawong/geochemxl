@@ -1,0 +1,8 @@
+= Testing
+
+----
+~$ pwd
+/gsq-geochem/profiles/gsq/scripts
+
+~$ pytest -W ignore -s geochemxl/tests/test_conversion.py::TestValidateSheetValidationDictionary30
+----

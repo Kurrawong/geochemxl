@@ -1,0 +1,59 @@
+= geochemxl
+
+This is a Python module that can be used either on the command line or within other programs as a library that converts Geochemistry Excel Workbooks into RDF data.
+
+This module requires Workbooks to be structured using the templates available from the https://geochem.dev.kurrawong.ai[Geochemistry Data Portal] and currently supports v 3.0+.
+
+== Use
+
+=== Basic Use
+
+The command line command to run this program against `Workbook-X.xlsx` and to produce RDF file `x.ttl` is:
+
+[source]
+----
+~$ python -W ignore -m geochemxl -o x.ttl Workbook-X.xlsx
+----
+
+Generally:
+
+[source]
+----
+~$ python -W ignore -m geochemxl -o {PATH_TO_OUTPUT_FILE} {PATH_TO_EXCEL_FILE}
+----
+
+`-W ignore` is used to ignore a series of low-level warnings that are not necessary to see.
+
+`-m geochemxl` means 'run the Python module geochemxl'
+
+`-o` tells the program where to write the output file to. If no `-o` is supplied then output will be written to screen
+
+=== Command Line Argument details
+
+You can print out all the command line argument options by asking for 'help' like this:
+
+[source]
+----
+~$ python -m geochemxl -h
+----
+
+...and you will get:
+
+[source]
+----
+usage: geoexcelrdf [-h] [-i] [-o OUTPUTFILE] [-u] [file_to_convert]
+
+positional arguments:
+  file_to_convert       The Excel file to convert to a SKOS vocabulary in RDF or an RDF file to convert to an Excel file (default: None)
+
+options:
+  -h, --help            show this help message and exit
+  -i, --info            The version and other info of this instance of Geochem Excel Converter (default: False)
+  -o OUTPUTFILE, --outputfile OUTPUTFILE
+                        An optionally-provided output file path. If not provided, output is to standard out (default: None)
+  -u, --update_workbook
+                        Update a given Excel Workbook's vocabularies (default: False)
+----
+
+== Testing
+
