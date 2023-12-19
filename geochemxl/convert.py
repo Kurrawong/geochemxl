@@ -4098,7 +4098,7 @@ def main(args=None):
             raise ConversionError("Only Excel files can be converted")
         else:
             wb = load_workbook(args.file_to_convert)
-            cc = Graph().parse(Path(__file__).parent / "tests" / "data" / "concepts-combined-3.0.ttl")
+            cc = Graph().parse(Path(__file__).parent.parent / "tests" / "data" / "3.0" / "concepts-combined.ttl")
             g = Graph()
 
             if args.outputfile is not None:

@@ -7,7 +7,7 @@ TESTS_DIR = Path(__file__).parent
 
 @pytest.fixture()
 def make_cc() -> Graph:
-    return Graph().parse(TESTS_DIR / "data" / "3.0" / "concepts-combined-3.0.ttl")
+    return Graph().parse(TESTS_DIR / "data" / "3.0" / "concepts-combined.ttl")
 
 
 class TestExtractSheetDatasetMetadata30:

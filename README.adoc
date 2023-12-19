@@ -46,6 +46,23 @@ Generally:
 
 `-o` tells the program where to write the output file to. If no `-o` is supplied then output will be written to screen
 
+
+To use the test workbook for version 3.0 in the `tests/data/3.0/ directory, run this command:
+
+[source]
+----
+~$ python -W ignore -m geochemxl -o tests/data/3.0/geochemxl.ttl tests/data/3.0/GeochemXL-3.0-integration.xlsx
+----
+
+You should see a result printed out like this:
+
+[source]
+----
+Processing workbook tests/data/3.0/GeochemXL-3.0-integration.xlsx
+----
+
+and a resulting RDF data file `tests/data/3.0/geochemxl.ttl`.
+
 === Command Line Argument details
 
 You can print out all the command line argument options by asking for 'help' like this:
@@ -74,6 +91,8 @@ options:
 ----
 
 == Testing
+
+See the test data file `tests/data/3.0/geochemxl.ttl` produced from the workbook `tests/data/3.0/GeochemXL-3.0-integration.ttl`.
 
 This code uses https://pypi.org/project/pytest/[pytest] to run its test suite. After installing pytest, you can run the entire suite from the command line, from within the directory about the geochemxl module like this:
 

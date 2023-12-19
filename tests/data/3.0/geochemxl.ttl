@@ -1,0 +1,3007 @@
+BASE <http://example.com/dataset/993a22de-af2c-4c3a-8934-843d2c4897c8/>
+PREFIX bore: <https://linked.data.gov.au/def/bore/>
+PREFIX ex: <http://example.com/>
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+PREFIX minten: <https://linked.data.gov.au/def/mining-tenements/>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX schema: <https://schema.org/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX sosa: <http://www.w3.org/ns/sosa/>
+PREFIX time: <http://www.w3.org/2006/time#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+<http://example.com/dataset/993a22de-af2c-4c3a-8934-843d2c4897c8>
+    a schema:Dataset ;
+    prov:qualifiedAttribution
+        [
+            prov:agent <https://linked.data.gov.au/def/gsq-geochem/agent/kurrawongai> ;
+            prov:hadRole <http://def.isotc211.org/iso19115/-1/2018/CitationAndResponsiblePartyInformation/code/CI_RoleCode/author> ;
+        ] ;
+    schema:dateCreated "2023-11-15T00:00:00"^^xsd:date ;
+    schema:dateModified "2023-11-15T00:00:00"^^xsd:date ;
+    schema:description "A testing dataset" ;
+    schema:hasPart
+        [
+            a sosa:ObservationCollection ;
+            sosa:hasMember
+                [
+                    a sosa:Observation ;
+                    sosa:hasFeatureOfInterest <sample/DS123> ;
+                    sosa:hasResult
+                        [
+                            a sosa:Result ;
+                            schema:unitCode <http://qudt.org/vocab/unit/GM-PER-TONNE> ;
+                            schema:value "0.53" ;
+                        ] ;
+                    sosa:observedProperty <analyteCode/Ag> ;
+                    sosa:usedProcedure
+                        [
+                            a sosa:Procedure ;
+                            schema:description "{\"FILTER_BEAM_SETTING\": \"High; 20s,20s,20s\", \"XRF_BEAM1_TIME\": 20, \"XRF_BEAM2_TIME\": 20, \"XRF_BEAM3_TIME\": 20, \"XRF_ELAPSED_TIME\": 60, \"XRF_INSTRUMENT_TYPE\": \"Olympus XXX\"}"^^rdf:JSON ;
+                            schema:name "XRF Analysis" ;
+                        ] ;
+                ] ,
+                [
+                    a sosa:Observation ;
+                    sosa:hasFeatureOfInterest <sample/SSABCD> ;
+                    sosa:hasResult
+                        [
+                            a sosa:Result ;
+                            schema:unitCode <http://qudt.org/vocab/unit/PPB> ;
+                            schema:value "0.31" ;
+                        ] ;
+                    sosa:observedProperty <analyteCode/Au> ;
+                    sosa:usedProcedure
+                        [
+                            a sosa:Procedure ;
+                            schema:description "{\"FILTER_BEAM_SETTING\": \"High; 20s,20s,20s\", \"XRF_BEAM1_TIME\": 20, \"XRF_BEAM2_TIME\": 20, \"XRF_BEAM3_TIME\": 20, \"XRF_ELAPSED_TIME\": 60, \"XRF_INSTRUMENT_TYPE\": \"Olympus XXX\"}"^^rdf:JSON ;
+                            schema:name "XRF Analysis" ;
+                        ] ;
+                ] ;
+        ] ,
+        <jobNumber/DD12345> ,
+        <jobNumber/JOB_27> ,
+        <lab/ABC-Corp> ,
+        <lab/ABC-Corp-GC> ,
+        <lab/DEF-Corp> ,
+        <sample/B998> ,
+        <sample/DS123> ,
+        <sample/SSABCD> ,
+        <user-ConceptScheme-analytes> ,
+        <user-ConceptScheme-assays> ,
+        <user-ConceptScheme-sample-preparations> ,
+        <https://linked.data.gov.au/dataset/gsq-bores/DEF123> ,
+        <https://linked.data.gov.au/dataset/gsq-tenements/6543> ;
+    schema:name "Test Dataset 1" ;
+.
+
+<https://linked.data.gov.au/def/gsq-geochem/uom/rotation>
+    skos:inScheme ex:user-defined-uom ;
+    skos:member
+        [
+            a skos:Concept ;
+            skos:definition "None"@en ;
+            skos:inScheme ex:user-defined-uom ;
+            skos:notation "rounds" ;
+            skos:prefLabel "A dummy unit of measure"@en ;
+        ] ;
+.
+
+<code/A>
+    a skos:Concept ;
+    skos:definition "Sample Prep Method A" ;
+    skos:inScheme <user-ConceptScheme-sample-preparations> ;
+    skos:prefLabel "A" ;
+    skos:topConceptOf <user-ConceptScheme-sample-preparations> ;
+    schema:citation "Some ref" ;
+.
+
+<code/Ag>
+    a skos:Concept ;
+    skos:definition "The rate of presence of aluminium within another substance" ;
+    skos:inScheme <user-ConceptScheme-analytes> ;
+    skos:prefLabel "Ag" ;
+    skos:topConceptOf <user-ConceptScheme-analytes> ;
+.
+
+<code/As>
+    a skos:Concept ;
+    skos:definition "The rate of presence of elemental arsenic within another substance" ;
+    skos:inScheme <user-ConceptScheme-analytes> ;
+    skos:prefLabel "As" ;
+    skos:topConceptOf <user-ConceptScheme-analytes> ;
+.
+
+<code/Au>
+    a skos:Concept ;
+    skos:definition "The rate of presence of elemental gold within another substance" ;
+    skos:inScheme <user-ConceptScheme-analytes> ;
+    skos:prefLabel "Au" ;
+    skos:topConceptOf <user-ConceptScheme-analytes> ;
+.
+
+<code/B>
+    a skos:Concept ;
+    skos:definition "Sample Prep Method B" ;
+    skos:inScheme <user-ConceptScheme-sample-preparations> ;
+    skos:prefLabel "B" ;
+    skos:topConceptOf <user-ConceptScheme-sample-preparations> ;
+    schema:citation "Some ref" ;
+.
+
+<code/C>
+    a skos:Concept ;
+    skos:definition "Sample Prep Method C" ;
+    skos:inScheme <user-ConceptScheme-sample-preparations> ;
+    skos:prefLabel "C" ;
+    skos:topConceptOf <user-ConceptScheme-sample-preparations> ;
+    schema:citation "Some ref" ;
+.
+
+<code/D>
+    a skos:Concept ;
+    skos:definition "Sample Prep Method D" ;
+    skos:inScheme <user-ConceptScheme-sample-preparations> ;
+    skos:prefLabel "D" ;
+    skos:topConceptOf <user-ConceptScheme-sample-preparations> ;
+    schema:citation "Some ref" ;
+.
+
+<code/TTTT>
+    a skos:Concept ;
+    skos:definition "Special Assay Test" ;
+    skos:inScheme <user-ConceptScheme-assays> ;
+    skos:prefLabel "TTTT" ;
+    skos:topConceptOf <user-ConceptScheme-assays> ;
+.
+
+<jobNumber/DD12345>
+    a sosa:ObservationCollection ;
+    sosa:hasMember
+        [
+            a sosa:Observation ;
+            prov:qualifiedAttribution
+                [
+                    prov:agent <lab/http://example.com/dataset/993a22de-af2c-4c3a-8934-843d2c4897c8/lab/ABC-Corp-GC> ;
+                    prov:hadRole <https://linked.data.gov.au/def/mining-roles/SampleAnalyser> ;
+                ] ;
+            sosa:hasFeatureOfInterest <sample/SSABCD> ;
+            sosa:usedProcedure
+                [
+                    a rdf:Seq ;
+                    rdfs:label "Sample Preparation codes" ;
+                    rdf:_1 <samplePrepCode/A> ;
+                    rdf:_2 <samplePrepCode/B> ;
+                    rdf:_3 <samplePrepCode/C> ;
+                    rdf:_4 <samplePrepCode/D> ;
+                ] ,
+                <assayCode/TTTT> ;
+        ] ;
+.
+
+<jobNumber/JOB_27>
+    a sosa:ObservationCollection ;
+    sosa:hasMember
+        [
+            a sosa:Observation ;
+            sosa:hasFeatureOfInterest <sample/SSABCD> ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:value "0.04" ;
+                ] ;
+            sosa:observedProperty <analyteCode/As> ;
+            sosa:usedProcedure <assayCode/TTTT> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            prov:qualifiedAttribution
+                [
+                    prov:agent <lab/http://example.com/dataset/993a22de-af2c-4c3a-8934-843d2c4897c8/lab/ABC-Corp-GC> ;
+                    prov:hadRole <https://linked.data.gov.au/def/mining-roles/SampleAnalyser> ;
+                ] ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    ex:isPreferredResult true ;
+                    ex:lowerDetectionLimit "0.1" ;
+                    schema:marginOfError "0.05" ;
+                    schema:unitCode <http://qudt.org/vocab/unit/PPB> ;
+                ] ;
+            sosa:observedProperty <analyteCode/Au> ;
+            sosa:usedProcedure <assayCode/TTTT> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            sosa:hasFeatureOfInterest <sample/SSABCD> ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:value "0.53" ;
+                ] ;
+            sosa:observedProperty <analyteCode/Ag> ;
+            sosa:usedProcedure <assayCode/TTTT> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            prov:qualifiedAttribution
+                [
+                    prov:agent <lab/http://example.com/dataset/993a22de-af2c-4c3a-8934-843d2c4897c8/lab/ABC-Corp-GC> ;
+                    prov:hadRole <https://linked.data.gov.au/def/mining-roles/SampleAnalyser> ;
+                ] ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    ex:isPreferredResult true ;
+                    ex:lowerDetectionLimit "0.1" ;
+                    schema:marginOfError "0.05" ;
+                    schema:unitCode <http://qudt.org/vocab/unit/PPB> ;
+                ] ;
+            sosa:observedProperty <analyteCode/Au> ;
+            sosa:usedProcedure <assayCode/TTTT> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            sosa:hasFeatureOfInterest <sample/DS123> ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:value "0.31" ;
+                ] ;
+            sosa:observedProperty <analyteCode/Au> ;
+            sosa:usedProcedure <assayCode/TTTT> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            prov:qualifiedAttribution
+                [
+                    prov:agent <lab/http://example.com/dataset/993a22de-af2c-4c3a-8934-843d2c4897c8/lab/ABC-Corp> ;
+                    prov:hadRole <https://linked.data.gov.au/def/mining-roles/SampleAnalyser> ;
+                ] ;
+            sosa:hasFeatureOfInterest <sample/SSABCD> ;
+            sosa:usedProcedure
+                [
+                    a rdf:Seq ;
+                    rdfs:label "Sample Preparation codes" ;
+                    rdf:_1 <samplePrepCode/A> ;
+                    rdf:_2 <samplePrepCode/B> ;
+                    rdf:_3 <samplePrepCode/C> ;
+                ] ,
+                <assayCode/TTTT> ;
+        ] ;
+.
+
+<lab/ABC-Corp>
+    a schema:Organization ;
+    schema:location "Winton" ;
+    schema:name "ABC Corp" ;
+.
+
+<lab/ABC-Corp-GC>
+    a schema:Organization ;
+    schema:location "Gold Coast" ;
+    schema:name "ABC Corp (GC)" ;
+.
+
+<lab/DEF-Corp>
+    a schema:Organization ;
+    schema:location "Brisbane" ;
+    schema:name "DEF Corp" ;
+.
+
+<sample/B998>
+    a sosa:Sample ;
+    ex:locationSurveyType <https://linked.data.gov.au/def/gsq-geochem/loc-survey-type/gps> ;
+    geo:hasGeometry
+        [
+            a geo:Geometry ;
+            geo:asWKT "POINTZ(-78.46212539980657 129.90315615404756 200.0)"^^geo:wktLiteral ;
+        ] ;
+    prov:generatedAtTime "2000-01-01"^^xsd:date ;
+.
+
+ex:user-defined-vocab
+    a skos:ConceptScheme ;
+    skos:notation "USER-VOC" ;
+    skos:prefLabel "User-defined Vocabulary" ;
+.
+
+<http://test.com/lithology/AB>
+    a skos:Concept ;
+    skos:altLabel "albite" ;
+    skos:notation "Ab"^^<http://test.com> ;
+    skos:prefLabel "Albite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/AC>
+    a skos:Concept ;
+    skos:altLabel "actinolite" ;
+    skos:notation "Ac"^^<http://test.com> ;
+    skos:prefLabel "Actinolite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/AD>
+    a skos:Concept ;
+    skos:altLabel "adularia" ;
+    skos:notation "Ad"^^<http://test.com> ;
+    skos:prefLabel "Adularia" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/AEOD>
+    a skos:Concept ;
+    skos:altLabel "Aeolian Silt" ;
+    skos:notation "TAL"^^<http://test.com> ;
+    skos:prefLabel "Aeolian deposit" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/AGGN>
+    a skos:Concept ;
+    skos:altLabel "Alkali granite gneiss" ;
+    skos:notation "ZGA"^^<http://test.com> ;
+    skos:prefLabel "alkali-granite-gneiss" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/AGLM>
+    a skos:Concept ;
+    skos:altLabel "Andesitic Agglomerate" ;
+    skos:notation "IAG"^^<http://test.com> ;
+    skos:prefLabel "Agglomerate" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/AM>
+    a skos:Concept ;
+    skos:altLabel "amphibole" ;
+    skos:notation "Am"^^<http://test.com> ;
+    skos:prefLabel "Inosilicates with 2-periodic double chains, Si4O11; Amphiboles" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/AMPH>
+    a skos:Concept ;
+    skos:notation "ZAM"^^<http://test.com> ;
+    skos:prefLabel "Amphibolite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/ANBS>
+    a skos:Concept ;
+    skos:altLabel "Andesite Basalt" ;
+    skos:notation "IBA"^^<http://test.com> ;
+    skos:prefLabel "Andesite-basalt" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/ANTF>
+    a skos:Concept ;
+    skos:altLabel "Andesite Pyroclastic Flow" ;
+    skos:notation "IAF"^^<http://test.com> ;
+    skos:prefLabel "Andesitic tuff" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/APLT>
+    a skos:Concept ;
+    skos:altLabel "Applite Dyke/Chill margin to pegmatite" ;
+    skos:notation "FAP"^^<http://test.com> ;
+    skos:prefLabel "Aplite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/ARKS>
+    a skos:Concept ;
+    skos:altLabel "Qz Feldspar Sandstone (Arkose minor matrix)" ;
+    skos:notation "SAS"^^<http://test.com> ;
+    skos:prefLabel "Arkose" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/ARNT>
+    a skos:Concept ;
+    skos:altLabel "Sandstone (Arenite - minor matrix)" ;
+    skos:notation "SSA"^^<http://test.com> ;
+    skos:prefLabel "Arenite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/AS>
+    a skos:Concept ;
+    skos:altLabel "arsenopyrite" ;
+    skos:notation "As"^^<http://test.com> ;
+    skos:prefLabel "Arsenopyrite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/AVOL>
+    a skos:Concept ;
+    skos:altLabel "Felsic volcanics" ;
+    skos:notation "FFV"^^<http://test.com> ;
+    skos:prefLabel "Acid volcanic rock" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/AZ>
+    a skos:Concept ;
+    skos:altLabel "azurite" ;
+    skos:notation "Az"^^<http://test.com> ;
+    skos:prefLabel "Azurite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/BA>
+    a skos:Concept ;
+    skos:altLabel "barite" ;
+    skos:notation "Ba"^^<http://test.com> ;
+    skos:prefLabel "Barite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/BCAR>
+    a skos:Concept ;
+    skos:altLabel "Fossiliferous carbonates" ;
+    skos:notation "SFC"^^<http://test.com> ;
+    skos:prefLabel "Biocarbonate" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/BDSD>
+    a skos:Concept ;
+    skos:altLabel "Aeolian Sand Dune" ;
+    skos:notation "TSD"^^<http://test.com> ;
+    skos:prefLabel "Beach dune sand" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/BI>
+    a skos:Concept ;
+    skos:altLabel "bismuthinite" ;
+    skos:notation "Bi"^^<http://test.com> ;
+    skos:prefLabel "Bismuthinite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/BIFM>
+    a skos:Concept ;
+    skos:altLabel
+        "Iron Formation - Banded Iron facies" ,
+        "Iron Formation - Carbonate facies" ,
+        "Iron Formation - Undifferentiated" ;
+    skos:notation
+        "SIB"^^<http://test.com> ,
+        "SIC"^^<http://test.com> ,
+        "SIU"^^<http://test.com> ;
+    skos:prefLabel "Banded iron formation" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/BKSH>
+    a skos:Concept ;
+    skos:altLabel "Black Shale" ;
+    skos:notation "SHB"^^<http://test.com> ;
+    skos:prefLabel "Black shale" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/BLSD>
+    a skos:Concept ;
+    skos:altLabel "Aeolian Sand" ;
+    skos:notation "TAS"^^<http://test.com> ;
+    skos:prefLabel "Blown sand" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/BN>
+    a skos:Concept ;
+    skos:altLabel "bornite" ;
+    skos:notation "Bn"^^<http://test.com> ;
+    skos:prefLabel "Bornite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/BRAD>
+    a skos:Concept ;
+    skos:altLabel "Andesite Auto breccia/dome" ;
+    skos:notation "IAB"^^<http://test.com> ;
+    skos:prefLabel "Brecciated andesite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/BSKM>
+    a skos:Concept ;
+    skos:altLabel "Komatiitic Basalt" ;
+    skos:notation "UKB"^^<http://test.com> ;
+    skos:prefLabel "Basaltic komatiite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/BSLT>
+    a skos:Concept ;
+    skos:notation "MBA"^^<http://test.com> ;
+    skos:prefLabel "Basalt" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/BSTF>
+    a skos:Concept ;
+    skos:altLabel "Mafic tuff" ;
+    skos:notation "MMT"^^<http://test.com> ;
+    skos:prefLabel "Basaltic tuff" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/BT>
+    a skos:Concept ;
+    skos:altLabel "biotite" ;
+    skos:notation "Bt"^^<http://test.com> ;
+    skos:prefLabel "Biotite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/CA>
+    a skos:Concept ;
+    skos:altLabel "calcite" ;
+    skos:notation "Ca"^^<http://test.com> ;
+    skos:prefLabel "Calcite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/CAAR>
+    a skos:Concept ;
+    skos:altLabel "calcareous Arenite" ;
+    skos:notation "SCA"^^<http://test.com> ;
+    skos:prefLabel "Sand-grade limestone" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/CABS>
+    a skos:Concept ;
+    skos:altLabel "Calc-alkaline basalt" ;
+    skos:notation "MCB"^^<http://test.com> ;
+    skos:prefLabel "Calc-alkali basalt" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/CACT>
+    a skos:Concept ;
+    skos:notation "CCC"^^<http://test.com> ;
+    skos:prefLabel "Calcrete" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/CB>
+    a skos:Concept ;
+    skos:altLabel "carbonate" ;
+    skos:notation "Cb"^^<http://test.com> ;
+    skos:prefLabel "CARBONATES (NITRATES)" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/CC>
+    a skos:Concept ;
+    skos:altLabel "chalcocite" ;
+    skos:notation "Cc"^^<http://test.com> ;
+    skos:prefLabel "Chalcocite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/CD>
+    a skos:Concept ;
+    skos:altLabel "chalcedony" ;
+    skos:notation "Cd"^^<http://test.com> ;
+    skos:prefLabel "Chalcedony" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/CESC>
+    a skos:Concept ;
+    skos:altLabel "Calcareous schist" ;
+    skos:notation "ZCS"^^<http://test.com> ;
+    skos:prefLabel "Calcareous Schist" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/CGLM>
+    a skos:Concept ;
+    skos:altLabel
+        "Alluvial Conglomerate " ,
+        "Rudite" ;
+    skos:notation
+        "SCO"^^<http://test.com> ,
+        "SRU"^^<http://test.com> ,
+        "TRC"^^<http://test.com> ;
+    skos:prefLabel "Conglomerate" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/CH>
+    a skos:Concept ;
+    skos:altLabel "chlorite" ;
+    skos:notation "Ch"^^<http://test.com> ;
+    skos:prefLabel "Chlorite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/CHRT>
+    a skos:Concept ;
+    skos:notation "SCT"^^<http://test.com> ;
+    skos:prefLabel "Chert" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/CL>
+    a skos:Concept ;
+    skos:altLabel "clay" ;
+    skos:notation "Cl"^^<http://test.com> ;
+    skos:prefLabel "Phyllosilicates" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/CLAY>
+    a skos:Concept ;
+    skos:altLabel "Tranposted Clay" ;
+    skos:notation "TCL"^^<http://test.com> ;
+    skos:prefLabel "Clay" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/CM>
+    a skos:Concept ;
+    skos:altLabel "chamosite" ;
+    skos:notation "Cm"^^<http://test.com> ;
+    skos:prefLabel "Chamosite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/CO>
+    a skos:Concept ;
+    skos:altLabel "cordierite" ;
+    skos:notation "Co"^^<http://test.com> ;
+    skos:prefLabel "Cordierite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/COAL>
+    a skos:Concept ;
+    skos:notation "SCL"^^<http://test.com> ;
+    skos:prefLabel "Coal" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/COLL>
+    a skos:Concept ;
+    skos:altLabel "Alluvial Colluvium" ;
+    skos:notation "TCO"^^<http://test.com> ;
+    skos:prefLabel "Colluvium" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/CP>
+    a skos:Concept ;
+    skos:altLabel "chalcopyrite" ;
+    skos:notation "Cp"^^<http://test.com> ;
+    skos:prefLabel "Chalcopyrite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/CRTT>
+    a skos:Concept ;
+    skos:altLabel "Carbonatite Extrusive (>50% Carbonate minerals)" ;
+    skos:notation "UCB"^^<http://test.com> ;
+    skos:prefLabel "Carbonatite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/CS>
+    a skos:Concept ;
+    skos:altLabel "cassiterite" ;
+    skos:notation "Cs"^^<http://test.com> ;
+    skos:prefLabel "Cassiterite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/CU>
+    a skos:Concept ;
+    skos:altLabel "copper" ;
+    skos:notation "Cu"^^<http://test.com> ;
+    skos:prefLabel "Copper" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/CV>
+    a skos:Concept ;
+    skos:altLabel "covellite" ;
+    skos:notation "Cv"^^<http://test.com> ;
+    skos:prefLabel "Covellite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/CY>
+    a skos:Concept ;
+    skos:altLabel "chrysocolla" ;
+    skos:notation "Cy"^^<http://test.com> ;
+    skos:prefLabel "Chrysocolla" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/DACT>
+    a skos:Concept ;
+    skos:altLabel "Dacite (Qz Rich felsic volcanic extrusive)" ;
+    skos:notation "FDV"^^<http://test.com> ;
+    skos:prefLabel "Dacite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/DATF>
+    a skos:Concept ;
+    skos:altLabel
+        "Dacite tuff (Qz rich Felsic Tuff)" ,
+        "Intermediate Lithic Tuff" ,
+        "Intermediate Tuff" ;
+    skos:notation
+        "FDT"^^<http://test.com> ,
+        "IIT"^^<http://test.com> ,
+        "ILT"^^<http://test.com> ;
+    skos:prefLabel "Dacitic tuff" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/DIOR>
+    a skos:Concept ;
+    skos:notation "MDI"^^<http://test.com> ;
+    skos:prefLabel "Diorite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/DLST>
+    a skos:Concept ;
+    skos:altLabel "Dolomite" ;
+    skos:notation "SDO"^^<http://test.com> ;
+    skos:prefLabel "Dolostone" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/DM>
+    a skos:Concept ;
+    skos:altLabel "dolomite" ;
+    skos:notation "Dm"^^<http://test.com> ;
+    skos:prefLabel "Dolomite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/DMCT>
+    a skos:Concept ;
+    skos:altLabel "Diamictite (Tillite)" ;
+    skos:notation "STI"^^<http://test.com> ;
+    skos:prefLabel "Diamictite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/DOLR>
+    a skos:Concept ;
+    skos:notation "MDO"^^<http://test.com> ;
+    skos:prefLabel "Dolerite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/DUNT>
+    a skos:Concept ;
+    skos:notation "UDU"^^<http://test.com> ;
+    skos:prefLabel "Dunite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/DURI>
+    a skos:Concept ;
+    skos:notation "LDC"^^<http://test.com> ;
+    skos:prefLabel "Duricrust" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/ECLG>
+    a skos:Concept ;
+    skos:notation "ZEC"^^<http://test.com> ;
+    skos:prefLabel "Eclogite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/EP>
+    a skos:Concept ;
+    skos:altLabel "epidote" ;
+    skos:notation "Ep"^^<http://test.com> ;
+    skos:prefLabel "Epidote" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/EVAP>
+    a skos:Concept ;
+    skos:altLabel "Aeolian Evaporite Dune" ;
+    skos:notation
+        "SEV"^^<http://test.com> ,
+        "TED"^^<http://test.com> ;
+    skos:prefLabel "Evaporite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/FECT>
+    a skos:Concept ;
+    skos:notation "CFC"^^<http://test.com> ;
+    skos:prefLabel "Ferricrete" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/FILL>
+    a skos:Concept ;
+    skos:altLabel
+        "Back Fill" ,
+        "Land Fill" ;
+    skos:notation
+        "HBF"^^<http://test.com> ,
+        "HLF"^^<http://test.com> ;
+    skos:prefLabel "Fill" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/FLSC>
+    a skos:Concept ;
+    skos:altLabel "Felsic schist" ;
+    skos:notation "ZSF"^^<http://test.com> ;
+    skos:prefLabel "Felsic Schist" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/FLST>
+    a skos:Concept ;
+    skos:altLabel "Felsic - Undifferentiated" ;
+    skos:notation "FOO"^^<http://test.com> ;
+    skos:prefLabel "Felsite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/FLTF>
+    a skos:Concept ;
+    skos:notation "FFT"^^<http://test.com> ;
+    skos:prefLabel "Felsic tuff" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/FS>
+    a skos:Concept ;
+    skos:altLabel "feldspar" ;
+    skos:notation "Fs"^^<http://test.com> ;
+    skos:prefLabel "Feldspar" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/FSPO>
+    a skos:Concept ;
+    skos:altLabel "Feldspar Hornblend Porhyry" ;
+    skos:notation
+        "FFP"^^<http://test.com> ,
+        "FHP"^^<http://test.com> ;
+    skos:prefLabel "Feldspar porphyry" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/FTBR>
+    a skos:Concept ;
+    skos:altLabel "Fault Breccia" ;
+    skos:notation "FBX"^^<http://test.com> ;
+    skos:prefLabel "Fault-breccia" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/FU>
+    a skos:Concept ;
+    skos:altLabel "fluorite" ;
+    skos:notation "Fu"^^<http://test.com> ;
+    skos:prefLabel "Fluorite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/GA>
+    a skos:Concept ;
+    skos:altLabel "galena" ;
+    skos:notation "Ga"^^<http://test.com> ;
+    skos:prefLabel "Galena" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/GBBR>
+    a skos:Concept ;
+    skos:notation "MGA"^^<http://test.com> ;
+    skos:prefLabel "Gabbro" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/GHPH>
+    a skos:Concept ;
+    skos:notation "ZPG"^^<http://test.com> ;
+    skos:prefLabel "Graphitic Phyllite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/GHSC>
+    a skos:Concept ;
+    skos:altLabel "Graphitic Schist" ;
+    skos:notation "ZSG"^^<http://test.com> ;
+    skos:prefLabel "Graphitic schist" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/GHSH>
+    a skos:Concept ;
+    skos:notation "SHG"^^<http://test.com> ;
+    skos:prefLabel "Graphitic Shale" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/GNSS>
+    a skos:Concept ;
+    skos:altLabel "Gneiss - Undifferentiated" ;
+    skos:notation "ZGO"^^<http://test.com> ;
+    skos:prefLabel "Gneiss" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/GOSS>
+    a skos:Concept ;
+    skos:notation "CGO"^^<http://test.com> ;
+    skos:prefLabel "Gossan" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/GOUG>
+    a skos:Concept ;
+    skos:altLabel "Fault Clay" ;
+    skos:notation "PUG"^^<http://test.com> ;
+    skos:prefLabel "Fault-gouge" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/GR>
+    a skos:Concept ;
+    skos:altLabel "garnet" ;
+    skos:notation "Gr"^^<http://test.com> ;
+    skos:prefLabel "Garnet" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/GRDI>
+    a skos:Concept ;
+    skos:altLabel "Ganodiorite" ;
+    skos:notation "MGD"^^<http://test.com> ;
+    skos:prefLabel "Granodiorite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/GRGN>
+    a skos:Concept ;
+    skos:altLabel "Granite gneiss" ;
+    skos:notation "ZGR"^^<http://test.com> ;
+    skos:prefLabel "Granitic gneiss" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/GRNT>
+    a skos:Concept ;
+    skos:altLabel "Granite (Qz, K Fel, Bi, Hb)" ;
+    skos:notation "FGR"^^<http://test.com> ;
+    skos:prefLabel "Granite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/GRVL>
+    a skos:Concept ;
+    skos:altLabel
+        "Alluvial Conglomerate Gravel" ,
+        "Alluvial Gravel" ,
+        "Lag" ,
+        "Transported Lag" ;
+    skos:notation
+        "LAG"^^<http://test.com> ,
+        "TCG"^^<http://test.com> ,
+        "TLA"^^<http://test.com> ,
+        "TRG"^^<http://test.com> ;
+    skos:prefLabel "Gravel" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/GSTN>
+    a skos:Concept ;
+    skos:altLabel "grainstone" ;
+    skos:notation "GRN"^^<http://test.com> ;
+    skos:prefLabel "Grainstone" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/GTGN>
+    a skos:Concept ;
+    skos:altLabel "Garnet Bearing Gneiss" ;
+    skos:notation "ZGG"^^<http://test.com> ;
+    skos:prefLabel "Garnet Gneiss" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/GY>
+    a skos:Concept ;
+    skos:altLabel "gypsum" ;
+    skos:notation "Gy"^^<http://test.com> ;
+    skos:prefLabel "Gypsum" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/GYST>
+    a skos:Concept ;
+    skos:altLabel "Gypsum" ;
+    skos:notation "CGY"^^<http://test.com> ;
+    skos:prefLabel "Gypsum-stone" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/GYWK>
+    a skos:Concept ;
+    skos:altLabel
+        "Greywacke (Grey qz, fd, lithic sandstone with mudstone matrix)" ,
+        "Greywacke - Slate" ;
+    skos:notation
+        "SGW"^^<http://test.com> ,
+        "ZGW"^^<http://test.com> ;
+    skos:prefLabel "Greywacke" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/HB>
+    a skos:Concept ;
+    skos:altLabel "hornblende" ;
+    skos:notation "Hb"^^<http://test.com> ;
+    skos:prefLabel "Hornblende" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/HBGB>
+    a skos:Concept ;
+    skos:altLabel "Hornblende gabbro" ;
+    skos:notation "MGH"^^<http://test.com> ;
+    skos:prefLabel "Hornblende-gabbro" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/HBPD>
+    a skos:Concept ;
+    skos:altLabel "HB Peridotite" ;
+    skos:notation "UPH"^^<http://test.com> ;
+    skos:prefLabel "Hornblende-peridotite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/HBPY>
+    a skos:Concept ;
+    skos:altLabel "HB PYROXENITE" ;
+    skos:notation "UXH"^^<http://test.com> ;
+    skos:prefLabel "Hornblende-pyroxenite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/HE>
+    a skos:Concept ;
+    skos:altLabel "hematite (massive)" ;
+    skos:notation "He"^^<http://test.com> ;
+    skos:prefLabel "Hematite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/HFLS>
+    a skos:Concept ;
+    skos:notation "ZHO"^^<http://test.com> ;
+    skos:prefLabel "Hornfels" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/HS>
+    a skos:Concept ;
+    skos:altLabel "hematite (specular)" ;
+    skos:notation "Hs"^^<http://test.com> ;
+    skos:prefLabel "Specularite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/HYDR>
+    a skos:Concept ;
+    skos:altLabel "Hydrothermal Breccia" ;
+    skos:notation "HBX"^^<http://test.com> ;
+    skos:prefLabel "Hydrothermal breccia" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/IL>
+    a skos:Concept ;
+    skos:altLabel "illite" ;
+    skos:notation "Il"^^<http://test.com> ;
+    skos:prefLabel "Illite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/IMLR>
+    a skos:Concept ;
+    skos:altLabel "Sandy Fossil rich limestone" ;
+    skos:notation "SFL"^^<http://test.com> ;
+    skos:prefLabel "Impure limestone" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/INSC>
+    a skos:Concept ;
+    skos:altLabel "Intermediate schist" ;
+    skos:notation "ZSI"^^<http://test.com> ;
+    skos:prefLabel "Intermediate Schist" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/IVLR>
+    a skos:Concept ;
+    skos:altLabel
+        "Intermediate - Undifferentiated" ,
+        "Intermediate volcanics" ;
+    skos:notation
+        "IIV"^^<http://test.com> ,
+        "IOO"^^<http://test.com> ;
+    skos:prefLabel "Intermediate volcanic rock" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/KA>
+    a skos:Concept ;
+    skos:altLabel "kaolinite" ;
+    skos:notation "Ka"^^<http://test.com> ;
+    skos:prefLabel "Kaolinite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/KF>
+    a skos:Concept ;
+    skos:altLabel
+        "feldspar (k-feldspar)" ,
+        "feldspar (pink)" ;
+    skos:notation
+        "Kf"^^<http://test.com> ,
+        "Pf"^^<http://test.com> ;
+    skos:prefLabel "K-Feldspar" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/KMBR>
+    a skos:Concept ;
+    skos:notation "UKI"^^<http://test.com> ;
+    skos:prefLabel "Kimberlite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/LACU>
+    a skos:Concept ;
+    skos:altLabel "Alluviual Sticky Lake Clay" ;
+    skos:notation "TLC"^^<http://test.com> ;
+    skos:prefLabel "Lacustrine deposit" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/LATR>
+    a skos:Concept ;
+    skos:altLabel "Pallid Zone (Leached)" ;
+    skos:notation "LPZ"^^<http://test.com> ;
+    skos:prefLabel "Laterite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/LATT>
+    a skos:Concept ;
+    skos:altLabel "Latite (Extrusive monzonite)" ;
+    skos:notation "ILV"^^<http://test.com> ;
+    skos:prefLabel "Latite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/LGNT>
+    a skos:Concept ;
+    skos:notation "SLG"^^<http://test.com> ;
+    skos:prefLabel "Lignite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/LI>
+    a skos:Concept ;
+    skos:altLabel "limonite" ;
+    skos:notation "Li"^^<http://test.com> ;
+    skos:prefLabel "Goethite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/LMST>
+    a skos:Concept ;
+    skos:notation "SLM"^^<http://test.com> ;
+    skos:prefLabel "Limestone" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/LU>
+    a skos:Concept ;
+    skos:altLabel "laumontite" ;
+    skos:notation "Lu"^^<http://test.com> ;
+    skos:prefLabel "Laumontite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/MA>
+    a skos:Concept ;
+    skos:altLabel "malachite" ;
+    skos:notation "Ma"^^<http://test.com> ;
+    skos:prefLabel "Malachite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/MAFI>
+    a skos:Concept ;
+    skos:altLabel
+        "Mafic - Undifferentiated" ,
+        "Mafic Volcanic -Undifferentiated" ;
+    skos:notation
+        "MMV"^^<http://test.com> ,
+        "MOO"^^<http://test.com> ;
+    skos:prefLabel "Mafic volcanic rock" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/MCHT>
+    a skos:Concept ;
+    skos:notation "ZCH"^^<http://test.com> ;
+    skos:prefLabel "Metachert" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/MDSD>
+    a skos:Concept ;
+    skos:altLabel
+        "Lateritic Pisolitic Clayey Sand" ,
+        "Transported Pisolitic clayey sand" ;
+    skos:notation
+        "LPS"^^<http://test.com> ,
+        "TPS"^^<http://test.com> ;
+    skos:prefLabel "Muddy sand" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/MDST>
+    a skos:Concept ;
+    skos:notation "SMU"^^<http://test.com> ;
+    skos:prefLabel "Mudstone" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/META>
+    a skos:Concept ;
+    skos:altLabel "Metamorphic  - Undifferentiated" ;
+    skos:notation "ZOO"^^<http://test.com> ;
+    skos:prefLabel "Metamorphic rock" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/MFGN>
+    a skos:Concept ;
+    skos:altLabel "Mafic gneiss" ;
+    skos:notation "ZGM"^^<http://test.com> ;
+    skos:prefLabel "Mafic Gneiss" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/MFSC>
+    a skos:Concept ;
+    skos:altLabel "Mafic schist" ;
+    skos:notation "ZSM"^^<http://test.com> ;
+    skos:prefLabel "Mafic Schist" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/MGMG>
+    a skos:Concept ;
+    skos:altLabel "Migmatite gneiss" ;
+    skos:notation "ZGI"^^<http://test.com> ;
+    skos:prefLabel "Migmatitic gneiss" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/MGST>
+    a skos:Concept ;
+    skos:altLabel "Magnesite" ;
+    skos:notation "SMG"^^<http://test.com> ;
+    skos:prefLabel "Magnesite-stone" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/MN>
+    a skos:Concept ;
+    skos:altLabel "manganite & black Mn minerals" ;
+    skos:notation "Mn"^^<http://test.com> ;
+    skos:prefLabel "Manganite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/MNDP>
+    a skos:Concept ;
+    skos:altLabel "Waste Dump" ;
+    skos:notation "HWD"^^<http://test.com> ;
+    skos:prefLabel "Mine Dump" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/MO>
+    a skos:Concept ;
+    skos:altLabel "molybdenite" ;
+    skos:notation "Mo"^^<http://test.com> ;
+    skos:prefLabel "Molybdenite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/MOGR>
+    a skos:Concept ;
+    skos:notation "IMG"^^<http://test.com> ;
+    skos:prefLabel "Monzogranite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/MONB>
+    a skos:Concept ;
+    skos:altLabel "Monomictic breccia" ;
+    skos:notation "SXM"^^<http://test.com> ;
+    skos:prefLabel "Monomict Breccia" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/MONO>
+    a skos:Concept ;
+    skos:altLabel "Monomictic conglomerate" ;
+    skos:notation "SCM"^^<http://test.com> ;
+    skos:prefLabel "Monomict Conglomerate" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/MRBL>
+    a skos:Concept ;
+    skos:notation "ZMA"^^<http://test.com> ;
+    skos:prefLabel "Marble" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/MS>
+    a skos:Concept ;
+    skos:altLabel "magnesite" ;
+    skos:notation "Ms"^^<http://test.com> ;
+    skos:prefLabel "Magnesite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/MSUL>
+    a skos:Concept ;
+    skos:altLabel "Massive Sulphides" ;
+    skos:notation "MAS"^^<http://test.com> ;
+    skos:prefLabel "Sulfide ore" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/MT>
+    a skos:Concept ;
+    skos:altLabel "magnetite" ;
+    skos:notation "Mt"^^<http://test.com> ;
+    skos:prefLabel "Magnetite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/MV>
+    a skos:Concept ;
+    skos:altLabel "muscovite" ;
+    skos:notation "Mv"^^<http://test.com> ;
+    skos:prefLabel "Muscovite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/MYLN>
+    a skos:Concept ;
+    skos:altLabel "mylonite" ;
+    skos:notation "MYL"^^<http://test.com> ;
+    skos:prefLabel "Mylonite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/NORS>
+    a skos:Concept ;
+    skos:altLabel "Poor/No Recovery" ;
+    skos:notation "OIS"^^<http://test.com> ;
+    skos:prefLabel "Lost Rock" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/OAMP>
+    a skos:Concept ;
+    skos:altLabel "Ortho Amphibolite" ;
+    skos:notation "ZOP"^^<http://test.com> ;
+    skos:prefLabel "Ortho-amphibolite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/OL>
+    a skos:Concept ;
+    skos:altLabel "olivine" ;
+    skos:notation "Ol"^^<http://test.com> ;
+    skos:prefLabel "Olivine" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/OLGB>
+    a skos:Concept ;
+    skos:altLabel "Olivine gabbro" ;
+    skos:notation "MGO"^^<http://test.com> ;
+    skos:prefLabel "Olivine-gabbro" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/OM>
+    a skos:Concept ;
+    skos:altLabel "opaque minerals" ;
+    skos:notation "Om"^^<http://test.com> ;
+    skos:prefLabel "Unknown Mineral Opaque" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/OPYR>
+    a skos:Concept ;
+    skos:altLabel "Olivine Pyroxenite" ;
+    skos:notation "UOX"^^<http://test.com> ;
+    skos:prefLabel "Olivine-pyroxenite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/OR>
+    a skos:Concept ;
+    skos:altLabel "orthoclase" ;
+    skos:notation "Or"^^<http://test.com> ;
+    skos:prefLabel "Orthoclase" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/PAMP>
+    a skos:Concept ;
+    skos:altLabel "Para Amphibolite" ;
+    skos:notation "ZAP"^^<http://test.com> ;
+    skos:prefLabel "Para-amphibolite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/PCTR>
+    a skos:Concept ;
+    skos:altLabel "High magnesium basalt" ;
+    skos:notation "UMB"^^<http://test.com> ;
+    skos:prefLabel "Picritic-rock" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/PEGM>
+    a skos:Concept ;
+    skos:altLabel "Pegmatite Very Coarse Grained Qz, Mu, Bi, Hb, Px Intrusive" ;
+    skos:notation "FPG"^^<http://test.com> ;
+    skos:prefLabel "Pegmatite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/PG>
+    a skos:Concept ;
+    skos:altLabel "plagioclase" ;
+    skos:notation "Pg"^^<http://test.com> ;
+    skos:prefLabel "Plagioclase" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/PH>
+    a skos:Concept ;
+    skos:altLabel "pyrrhotite" ;
+    skos:notation "Ph"^^<http://test.com> ;
+    skos:prefLabel "Pyrrhotite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/PHGN>
+    a skos:Concept ;
+    skos:altLabel "Px-Hb Gabbro Norite" ;
+    skos:notation "MXH"^^<http://test.com> ;
+    skos:prefLabel "Pyroxene-hornblende-gabbronorite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/PHOS>
+    a skos:Concept ;
+    skos:notation "SPP"^^<http://test.com> ;
+    skos:prefLabel "Phosphorite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/PHPD>
+    a skos:Concept ;
+    skos:altLabel "Pyroxene Hornblend Peridotite" ;
+    skos:notation "UXH"^^<http://test.com> ;
+    skos:prefLabel "Pyroxene-hornblende-peridotite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/PHYL>
+    a skos:Concept ;
+    skos:notation "ZPH"^^<http://test.com> ;
+    skos:prefLabel "Phyllite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/PL>
+    a skos:Concept ;
+    skos:altLabel "pyrolusite" ;
+    skos:notation "Pl"^^<http://test.com> ;
+    skos:prefLabel "Pyrolusite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/POLB>
+    a skos:Concept ;
+    skos:altLabel "Polymictic breccia" ;
+    skos:notation "SXP"^^<http://test.com> ;
+    skos:prefLabel "Polymict Breccia" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/POLY>
+    a skos:Concept ;
+    skos:altLabel "Polymictic conglomerate" ;
+    skos:notation "SCP"^^<http://test.com> ;
+    skos:prefLabel "Polymict Conglomerate" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/PORA>
+    a skos:Concept ;
+    skos:altLabel "Andesite Porphyry" ;
+    skos:notation "IAP"^^<http://test.com> ;
+    skos:prefLabel "Porphyritic Andesite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/PORD>
+    a skos:Concept ;
+    skos:altLabel
+        "Intermediate HB Fel Porphyry" ,
+        "Intermediate porphyry" ;
+    skos:notation
+        "IHP"^^<http://test.com> ,
+        "IIP"^^<http://test.com> ;
+    skos:prefLabel "Porphyritic Dacite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/PPYX>
+    a skos:Concept ;
+    skos:altLabel
+        "Plagioclase Pyroxenite" ,
+        "Plagioclse Hb Pyroxenite" ;
+    skos:notation
+        "UHX"^^<http://test.com> ,
+        "UXP"^^<http://test.com> ;
+    skos:prefLabel "Plagioclase pyroxenite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/PRDT>
+    a skos:Concept ;
+    skos:altLabel "Olivine Peridotite" ;
+    skos:notation
+        "UPD"^^<http://test.com> ,
+        "UPO"^^<http://test.com> ;
+    skos:prefLabel "Peridotite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/PRGN>
+    a skos:Concept ;
+    skos:altLabel "Paragneiss (Intermediate)" ;
+    skos:notation "ZGP"^^<http://test.com> ;
+    skos:prefLabel "Paragneiss" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/PRPH>
+    a skos:Concept ;
+    skos:altLabel "Pelitic phyllite" ;
+    skos:notation "ZPE"^^<http://test.com> ;
+    skos:prefLabel "Paraphyllite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/PRSH>
+    a skos:Concept ;
+    skos:altLabel "Pelitic schist" ;
+    skos:notation "ZSP"^^<http://test.com> ;
+    skos:prefLabel "Paraschist" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/PRSL>
+    a skos:Concept ;
+    skos:altLabel "Pelitic slate" ;
+    skos:notation "ZPS"^^<http://test.com> ;
+    skos:prefLabel "Paraslate" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/PX>
+    a skos:Concept ;
+    skos:altLabel "pyroxene" ;
+    skos:notation "Px"^^<http://test.com> ;
+    skos:prefLabel "Inosilicates: Inosilicates with 2-periodic single chains, Si2O6; pyroxene family" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/PXNT>
+    a skos:Concept ;
+    skos:notation "UXO"^^<http://test.com> ;
+    skos:prefLabel "Pyroxenite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/PY>
+    a skos:Concept ;
+    skos:altLabel "pyrite" ;
+    skos:notation "Py"^^<http://test.com> ;
+    skos:prefLabel "Pyrite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/PYPR>
+    a skos:Concept ;
+    skos:altLabel "Pyroxene Peridotite" ;
+    skos:notation "UPX"^^<http://test.com> ;
+    skos:prefLabel "Pyroxene-peridotite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/QFPG>
+    a skos:Concept ;
+    skos:altLabel "Quartz Feldspar paragneiss (Felsic)" ;
+    skos:notation "ZGF"^^<http://test.com> ;
+    skos:prefLabel "Quartz-feldspar paragneiss" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/QRGG>
+    a skos:Concept ;
+    skos:notation "ZGQ"^^<http://test.com> ;
+    skos:prefLabel "Quartz rich granite gneiss" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/QTZT>
+    a skos:Concept ;
+    skos:notation "ZQZ"^^<http://test.com> ;
+    skos:prefLabel "Quartzite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/QZ>
+    a skos:Concept ;
+    skos:altLabel "quartz" ;
+    skos:notation "Qz"^^<http://test.com> ;
+    skos:prefLabel "Quartz" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/QZBG>
+    a skos:Concept ;
+    skos:altLabel "Quartz Feldspar Biotite Gneiss" ;
+    skos:notation "ZGB"^^<http://test.com> ;
+    skos:prefLabel "Quartz-feldspar-biotite gneiss" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/QZWK>
+    a skos:Concept ;
+    skos:altLabel "Qz Feldspar Wacke (Mudstone matrix)" ;
+    skos:notation "SAW"^^<http://test.com> ;
+    skos:prefLabel "Quartz-wacke" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/RASH>
+    a skos:Concept ;
+    skos:altLabel "Rhyolite Ash (unconsolidated)" ;
+    skos:notation "FRA"^^<http://test.com> ;
+    skos:prefLabel "Rhyolitic Ash" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/RDTF>
+    a skos:Concept ;
+    skos:altLabel "Rhyodacite Tuff" ;
+    skos:notation "IRT"^^<http://test.com> ;
+    skos:prefLabel "Rhyodactic tuff" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/RHDA>
+    a skos:Concept ;
+    skos:altLabel "Rhyodacite (intermdiate volcanic extrusive)" ;
+    skos:notation "IRV"^^<http://test.com> ;
+    skos:prefLabel "Rhyodacite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/RHLT>
+    a skos:Concept ;
+    skos:altLabel "Rhyolite extrusive volcanic" ;
+    skos:notation "FRV"^^<http://test.com> ;
+    skos:prefLabel "Rhyolite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/RYTF>
+    a skos:Concept ;
+    skos:altLabel "Rhyolite tuff" ;
+    skos:notation "FRT"^^<http://test.com> ;
+    skos:prefLabel "Rhyolitic tuff" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/SAND>
+    a skos:Concept ;
+    skos:altLabel "Alluvial Sand" ;
+    skos:notation "TRS"^^<http://test.com> ;
+    skos:prefLabel "Sand" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/SB>
+    a skos:Concept ;
+    skos:altLabel "stibnite" ;
+    skos:notation "Sb"^^<http://test.com> ;
+    skos:prefLabel "Stibnite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/SCHT>
+    a skos:Concept ;
+    skos:notation "ZSC"^^<http://test.com> ;
+    skos:prefLabel "Schist" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/SDMD>
+    a skos:Concept ;
+    skos:altLabel
+        "Lateritic Pisolitic Sandy Clay" ,
+        "Tranported Pisolitic sandy clay" ;
+    skos:notation
+        "LPC"^^<http://test.com> ,
+        "TPC"^^<http://test.com> ;
+    skos:prefLabel "Sandy mud" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/SDST>
+    a skos:Concept ;
+    skos:notation "OSO"^^<http://test.com> ;
+    skos:prefLabel "Sandstone" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/SE>
+    a skos:Concept ;
+    skos:altLabel "sericite" ;
+    skos:notation "Se"^^<http://test.com> ;
+    skos:prefLabel "Sericite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/SERP>
+    a skos:Concept ;
+    skos:notation "ZSE"^^<http://test.com> ;
+    skos:prefLabel "Serpentinite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/SHLE>
+    a skos:Concept ;
+    skos:notation "SSH"^^<http://test.com> ;
+    skos:prefLabel "Shale" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/SICT>
+    a skos:Concept ;
+    skos:notation "CSC"^^<http://test.com> ;
+    skos:prefLabel "Silcrete" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/SILT>
+    a skos:Concept ;
+    skos:altLabel "Alluvial Silt" ;
+    skos:notation "TRL"^^<http://test.com> ;
+    skos:prefLabel "Silt" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/SKRN>
+    a skos:Concept ;
+    skos:notation "ZSK"^^<http://test.com> ;
+    skos:prefLabel "Skarn" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/SL>
+    a skos:Concept ;
+    skos:altLabel "scheelite" ;
+    skos:notation "Sl"^^<http://test.com> ;
+    skos:prefLabel "Scheelite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/SLAT>
+    a skos:Concept ;
+    skos:notation "ZSL"^^<http://test.com> ;
+    skos:prefLabel "Slate" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/SLST>
+    a skos:Concept ;
+    skos:notation "SST"^^<http://test.com> ;
+    skos:prefLabel "Siltstone" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/SM>
+    a skos:Concept ;
+    skos:altLabel "smectite" ;
+    skos:notation "Sm"^^<http://test.com> ;
+    skos:prefLabel "Smectite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/SP>
+    a skos:Concept ;
+    skos:altLabel "sphalerite" ;
+    skos:notation "Sp"^^<http://test.com> ;
+    skos:prefLabel "Sphalerite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/SPIC>
+    a skos:Concept ;
+    skos:notation "SSP"^^<http://test.com> ;
+    skos:prefLabel "Spiculite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/SPRL>
+    a skos:Concept ;
+    skos:altLabel
+        "Lower Saprolite 100% weathered/reduced" ,
+        "Saprock > 20% unweathered minerals" ,
+        "Upper Saprolite 100% oxidised" ;
+    skos:notation
+        "LSL"^^<http://test.com> ,
+        "LSR"^^<http://test.com> ,
+        "LSU"^^<http://test.com> ;
+    skos:prefLabel "Saprolite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/SR>
+    a skos:Concept ;
+    skos:altLabel "siderite/rhodochrosite" ;
+    skos:notation "Sr"^^<http://test.com> ;
+    skos:prefLabel "Rhodochrosite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/SSHL>
+    a skos:Concept ;
+    skos:notation "SBS"^^<http://test.com> ;
+    skos:prefLabel "Sulphidic Shale" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/ST>
+    a skos:Concept ;
+    skos:altLabel "serpentine" ;
+    skos:notation "St"^^<http://test.com> ;
+    skos:prefLabel "Serpentine" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/STPE>
+    a skos:Concept ;
+    skos:altLabel "Mined/Stope/Shaft/Drive" ;
+    skos:notation "HMI"^^<http://test.com> ;
+    skos:prefLabel "Stope" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/SU>
+    a skos:Concept ;
+    skos:altLabel "sulphides undifferentiated" ;
+    skos:notation "Su"^^<http://test.com> ;
+    skos:prefLabel "SULFIDES and SULFOSALTS (sulfides, selenides, tellurides; arsenides, antimonides, bismuthides; sulfarsenites, sulfantimonites, sulfbismuthites, etc.)" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/SURF>
+    a skos:Concept ;
+    skos:altLabel
+        "Mottled Transported Cover" ,
+        "Permafrost" ,
+        "Tundra" ;
+    skos:notation
+        "OPF"^^<http://test.com> ,
+        "OUT"^^<http://test.com> ,
+        "TMO"^^<http://test.com> ;
+    skos:prefLabel "Superficial deposit" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/SYEN>
+    a skos:Concept ;
+    skos:altLabel "Syenite (K fels>>Plag + Hb, Bi)" ;
+    skos:notation "FSY"^^<http://test.com> ;
+    skos:prefLabel "Syenite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/SYGN>
+    a skos:Concept ;
+    skos:notation "ZGS"^^<http://test.com> ;
+    skos:prefLabel "Syenite gneiss" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/TA>
+    a skos:Concept ;
+    skos:altLabel "talc" ;
+    skos:notation "Ta"^^<http://test.com> ;
+    skos:prefLabel "Talc" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/TCHS>
+    a skos:Concept ;
+    skos:notation "ZTC"^^<http://test.com> ;
+    skos:prefLabel "Talc Chlorite Schist" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/TCNS>
+    a skos:Concept ;
+    skos:altLabel "Talc carbonate schist" ;
+    skos:notation "ZCT"^^<http://test.com> ;
+    skos:prefLabel "Talc Carbonate Schist" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/TILI>
+    a skos:Concept ;
+    skos:altLabel "Overburden Tillite" ;
+    skos:notation "OTI"^^<http://test.com> ;
+    skos:prefLabel "Tillite" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/TLBS>
+    a skos:Concept ;
+    skos:notation "MTB"^^<http://test.com> ;
+    skos:prefLabel "Tholeiitic basalt" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/TM>
+    a skos:Concept ;
+    skos:altLabel "tourmaline" ;
+    skos:notation "Tm"^^<http://test.com> ;
+    skos:prefLabel "Tourmaline" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/TN>
+    a skos:Concept ;
+    skos:altLabel "tenorite" ;
+    skos:notation "Tn"^^<http://test.com> ;
+    skos:prefLabel "Tenorite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/TNGN>
+    a skos:Concept ;
+    skos:altLabel "Tonalite gneiss" ;
+    skos:notation "ZGT"^^<http://test.com> ;
+    skos:prefLabel "Tonalite Gneiss" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/TRAC>
+    a skos:Concept ;
+    skos:notation "FTR"^^<http://test.com> ;
+    skos:prefLabel "Trachyte" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/TRAV>
+    a skos:Concept ;
+    skos:notation "STV"^^<http://test.com> ;
+    skos:prefLabel "Travertine" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/TT>
+    a skos:Concept ;
+    skos:altLabel "tetrahedrite" ;
+    skos:notation "Tt"^^<http://test.com> ;
+    skos:prefLabel "Tetrahedrite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/ULSC>
+    a skos:Concept ;
+    skos:altLabel "Ultramafic schist" ;
+    skos:notation "ZSU"^^<http://test.com> ;
+    skos:prefLabel "Ultramafic Schist" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/UM>
+    a skos:Concept ;
+    skos:altLabel "unidentified mineral" ;
+    skos:notation "Um"^^<http://test.com> ;
+    skos:prefLabel "Unknown Mineral Transparent" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/UMAF>
+    a skos:Concept ;
+    skos:altLabel "Ultramafic - Undifferentiated" ;
+    skos:notation "UOO"^^<http://test.com> ;
+    skos:prefLabel "Ultramafic-rock" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/VEIN>
+    a skos:Concept ;
+    skos:altLabel
+        "quartz vein" ,
+        "vein" ;
+    skos:notation
+        "VEN"^^<http://test.com> ,
+        "VQZ"^^<http://test.com> ;
+    skos:prefLabel "Vein" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/VOID>
+    a skos:Concept ;
+    skos:altLabel "void" ;
+    skos:notation "VOI"^^<http://test.com> ;
+    skos:prefLabel "Void" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/WACK>
+    a skos:Concept ;
+    skos:altLabel "Sandstone Wacke (Mudstone matrix)" ;
+    skos:notation "SSW"^^<http://test.com> ;
+    skos:prefLabel "Wacke" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<http://test.com/lithology/WF>
+    a skos:Concept ;
+    skos:altLabel "wolfram" ;
+    skos:notation "Wf"^^<http://test.com> ;
+    skos:prefLabel "Wolframite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/WO>
+    a skos:Concept ;
+    skos:altLabel "wollastonite" ;
+    skos:notation "Wo"^^<http://test.com> ;
+    skos:prefLabel "Wollastonite" ;
+    skos:topConceptOf <http://test.com/minerals-cs> ;
+.
+
+<http://test.com/lithology/XGGN>
+    a skos:Concept ;
+    skos:altLabel "Xenolithic granite gneiss" ;
+    skos:notation "ZGX"^^<http://test.com> ;
+    skos:prefLabel "xenolithic-granite-gneiss" ;
+    skos:topConceptOf <http://test.com/lithology-cs> ;
+.
+
+<https://linked.data.gov.au/dataset/gsq-tenements/6543>
+    a minten:Tenement ;
+    rdfs:comment "None" ;
+    prov:qualifiedAttribution
+        [
+            prov:agent "Test Operator" ;
+            prov:hadRole <https://linked.data.gov.au/def/mining-roles/TenementOperator> ;
+        ] ,
+        [
+            prov:agent "Test Mining" ;
+            prov:hadRole <https://linked.data.gov.au/def/mining-roles/TenementHolder> ;
+        ] ;
+    minten:hasProject "Test Mine" ;
+    schema:additionalType <https://linked.data.gov.au/def/gsq-geochem/lease-name/ml> ;
+    schema:location
+        [
+            a
+                geo:Feature ,
+                minten:TenementArea ;
+            geo:hasGeometry
+                [
+                    a geo:Geometry ;
+                    rdfs:comment "CRS is https://linked.data.gov.au/def/gsq-geochem/coord-sys-id/gda94" ;
+                    schema:identifier "45"^^minten:MapSheet ;
+                ] ;
+        ] ;
+.
+
+ex:user-defined-uom
+    a skos:ConceptScheme ;
+    skos:notation "USER-UOM" ;
+    skos:prefLabel "User-defined Units of Measure" ;
+.
+
+<user-ConceptScheme-assays>
+    a skos:ConceptScheme ;
+    skos:hasTopConcept <code/TTTT> ;
+    skos:prefLabel "User-defined Assays"@en ;
+.
+
+<sample/DS123>
+    a sosa:Sample ;
+    rdfs:comment "Nothing to say" ;
+    prov:generatedAtTime "2023-09-15"^^xsd:date ;
+    sosa:isFeatureOfInterestOf
+        [
+            a sosa:Observation ;
+            sosa:hasFeatureOfInterest <sample/DS123> ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:value 2.75e+00 ;
+                ] ;
+            sosa:observedProperty ex:SpecificGravity ;
+        ] ,
+        [
+            a sosa:Observation ;
+            sosa:hasFeatureOfInterest <sample/DS123> ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:value "-5x10-3" ;
+                ] ;
+            sosa:observedProperty <http://qudt.org/vocab/quantitykind/MagneticSusceptability> ;
+        ] ;
+    sosa:isSampleOf <https://linked.data.gov.au/dataset/gsq-bores/DEF123> ;
+    sosa:madeBySensor "XYZ" ;
+    sosa:usedProcedure <https://linked.data.gov.au/def/gsq-geochem/sample-type-drilling/core> ;
+    schema:additionalType <ttps://linked.data.gov.au/def/sample-type/rock> ;
+    schema:dateIssued "2023-09-20"^^xsd:date ;
+    schema:depth
+        15 ,
+        1.75e+01 ;
+.
+
+<user-ConceptScheme-analytes>
+    a skos:ConceptScheme ;
+    skos:hasTopConcept
+        <code/Ag> ,
+        <code/As> ,
+        <code/Au> ;
+    skos:prefLabel "User-defined Analytes"@en ;
+.
+
+<https://linked.data.gov.au/dataset/gsq-bores/DEF123>
+    a bore:Bore ;
+    ex:locationSurveyType <https://linked.data.gov.au/def/gsq-geochem/loc-survey-type/gps> ;
+    ex:preCollarDepth 5 ;
+    ex:preCollarMethod <https://linked.data.gov.au/def/gsq-geochem/drill-type/diamond-drilling> ;
+    geo:hasGeometry
+        [
+            a geo:Geometry ;
+            geo:asWKT "POINTZ(-86.45843237983185 74.86184826893177 123.0)"^^geo:wktLiteral ;
+        ] ;
+    time:hasTime
+        [
+            a bore:DrillingTime ;
+            prov:endedAtTime "2023-10-10"^^xsd:date ;
+            prov:startedAtTime "2023-09-10"^^xsd:date ;
+        ] ;
+    prov:qualifiedAttribution
+        [
+            prov:agent "ABC Corp" ;
+            prov:hadRole <https://linked.data.gov.au/def/mining-roles/Driller> ;
+        ] ,
+        [
+            prov:agent "XYZ Corp" ;
+            prov:hadRole <https://linked.data.gov.au/def/mining-roles/Surveyer> ;
+        ] ;
+    sosa:isFeatureOfInterestOf
+        [
+            a sosa:ObservationCollection ;
+            sosa:hasFeatureOfInterest <https://linked.data.gov.au/dataset/gsq-bores/DEF123> ;
+            sosa:hasMember
+                [
+                    a sosa:Observation ;
+                    rdfs:label "Azimuth" ;
+                    sosa:hasResult
+                        [
+                            a sosa:Result ;
+                            schema:unitCode <http://qudt.org/vocab/unit/DEG> ;
+                            schema:value 23 ;
+                        ] ;
+                    sosa:observedProperty bore:hasAzimuth ;
+                ] ,
+                [
+                    a sosa:Observation ;
+                    rdfs:label "Structure" ;
+                    sosa:hasResult
+                        [
+                            a sosa:Result ;
+                            schema:value <https://linked.data.gov.au/def/gsq-geochem/structural-feature/cleavage> ;
+                        ] ;
+                    sosa:observedProperty <https://linked.data.gov.au/def/geosample/structure> ;
+                ] ,
+                [
+                    a sosa:Observation ;
+                    rdfs:label "Depth" ;
+                    sosa:hasResult
+                        [
+                            a sosa:Result ;
+                            schema:unitCode <http://qudt.org/vocab/unit/M> ;
+                            schema:value 1.5e+02 ;
+                        ] ;
+                    sosa:observedProperty schema:depth ;
+                ] ,
+                [
+                    a sosa:Observation ;
+                    rdfs:label "Dip Direction" ;
+                    sosa:hasResult
+                        [
+                            a sosa:Result ;
+                            schema:unitCode <http://qudt.org/vocab/unit/DEG> ;
+                            schema:value -270 ;
+                        ] ;
+                    sosa:observedProperty bore:hasDipDirection ;
+                ] ,
+                [
+                    a sosa:Observation ;
+                    rdfs:label "Alpha Angle" ;
+                    sosa:hasResult
+                        [
+                            a sosa:Result ;
+                            schema:unitCode <http://qudt.org/vocab/unit/DEG> ;
+                            schema:value 45 ;
+                        ] ;
+                    sosa:observedProperty bore:hasAlphaAngle ;
+                ] ,
+                [
+                    a sosa:Observation ;
+                    rdfs:label "Dip" ;
+                    sosa:hasResult
+                        [
+                            a sosa:Result ;
+                            schema:unitCode <http://qudt.org/vocab/unit/DEG> ;
+                            schema:value -23 ;
+                        ] ;
+                    sosa:observedProperty bore:hasDip ;
+                ] ,
+                [
+                    a sosa:Observation ;
+                    rdfs:label "Beta Angle" ;
+                    sosa:hasResult
+                        [
+                            a sosa:Result ;
+                            schema:unitCode <http://qudt.org/vocab/unit/DEG> ;
+                            schema:value 270 ;
+                        ] ;
+                    sosa:observedProperty bore:hasBetaAngle ;
+                ] ;
+        ] ,_:N7359380932334c73b7f4b3727a818d98 ,_:N7f6933013c434c97a1bf9f083692df2b ,_:Nd1ed88c196dd4734ae586aa9a126f957 ;
+    bore:hadDrillingMethod <https://linked.data.gov.au/def/gsq-geochem/drill-type/box-core> ;
+    bore:hadSurvey
+        [
+            a bore:Survey ;
+            rdfs:comment "Nothing much" ;
+            time:hasTime
+                [
+                    a time:Instant ;
+                    time:inXSDDateTime "2023-11-01"^^xsd:date ;
+                ] ;
+            prov:qualifiedAttribution
+                [
+                    prov:agent "Some Corp" ;
+                    prov:hadRole <https://linked.data.gov.au/def/mining-roles/Surveyer> ;
+                ] ;
+            sosa:hasMember
+                [
+                    sosa:hasFeatureOfInterest <https://linked.data.gov.au/dataset/gsq-bores/DEF123> ;
+                    sosa:hasResult
+                        [
+                            schema:unitCode <http://qudt.org/vocab/unit/NanoT> ;
+                            schema:value 60000 ;
+                        ] ;
+                    sosa:observedProperty ex:hasMagneticFieldStrength ;
+                ] ,_:N7359380932334c73b7f4b3727a818d98 ,_:N7f6933013c434c97a1bf9f083692df2b ,_:Nd1ed88c196dd4734ae586aa9a126f957 ;
+            sosa:madeBySensor <https://linked.data.gov.au/def/gsq-geochem/rpt-survey-type/magnetic> ;
+        ] ;
+    bore:hasCollarAzimuth 270 ;
+    bore:hasCollarDip -60 ;
+    bore:hasDiameter <https://linked.data.gov.au/def/gsq-geochem/drill-diameter/hq3> ;
+    bore:hasPurpose <https://linked.data.gov.au/def/gsq-geochem/current-class/appraisal> ;
+    schema:depth 2e+02 ;
+    schema:hasPart
+        [
+            a bore:BoreholeInterval ;
+            schema:hasPart _:N9f48900286c34dc8aec7c99e3fa4d6a9 ;
+        ] ;
+.
+
+<sample/SSABCD>
+    a sosa:Sample ;
+    ex:locationSurveyType
+        <https://linked.data.gov.au/def/gsq-geochem/loc-survey-type/dgps> ,
+        <https://linked.data.gov.au/def/gsq-geochem/loc-survey-type/gps> ;
+    ex:meshSize <https://linked.data.gov.au/def/gsq-geochem/mesh-size/3-4-in> ;
+    ex:ph <https://linked.data.gov.au/def/gsq-geochem/colour/cream> ;
+    geo:hasGeometry
+        [
+            a geo:Geometry ;
+            geo:asWKT "POINTZ(-86.45843237983185 74.86184826893177 10)"^^geo:wktLiteral ;
+        ] ,
+        [
+            a geo:Geometry ;
+            geo:asWKT "POINTZ(-78.46212539980657 129.90315615404756 200.0)"^^geo:wktLiteral ;
+        ] ;
+    rdfs:comment "None" ;
+    prov:generatedAtTime
+        "2000-01-01"^^xsd:date ,
+        "2023-11-25"^^xsd:date ;
+    sosa:isFeatureOfInterestOf
+        [
+            a sosa:Observation ;
+            sosa:hasFeatureOfInterest <sample/SSABCD> ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:value "-5x10-3" ;
+                ] ;
+            sosa:observedProperty <http://qudt.org/vocab/quantitykind/MagneticSusceptability> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            sosa:hasFeatureOfInterest <sample/SSABCD> ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:value 2.7e+00 ;
+                ] ;
+            sosa:observedProperty ex:SpecificGravity ;
+        ] ,
+        [
+            a sosa:Observation ;
+            sosa:hasFeatureOfInterest <sample/SSABCD> ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:value 7 ;
+                ] ;
+            sosa:observedProperty <http://qudt.org/vocab/quantitykind/PH> ;
+        ] ;
+    sosa:madeBySensor "Big One" ;
+    schema:additionalType <https://linked.data.gov.au/def/gsq-geochem/sample-type-surface/beach-sediments> ;
+    schema:color <https://linked.data.gov.au/def/gsq-geochem/colour/cream> ;
+    schema:dateIssued "2023-11-26"^^xsd:date ;
+    schema:depth 5 ;
+    schema:material <https://linked.data.gov.au/def/gsq-geochem/sample-material/sediment> ;
+.
+
+<user-ConceptScheme-sample-preparations>
+    a skos:ConceptScheme ;
+    skos:hasTopConcept
+        <code/A> ,
+        <code/B> ,
+        <code/C> ,
+        <code/D> ;
+    skos:prefLabel "User-defined Preparations"@en ;
+.
+
+<http://test.com/minerals-cs>
+    a skos:ConceptScheme ;
+    skos:hasTopConcept
+        <http://test.com/lithology/AB> ,
+        <http://test.com/lithology/AC> ,
+        <http://test.com/lithology/AD> ,
+        <http://test.com/lithology/AM> ,
+        <http://test.com/lithology/AS> ,
+        <http://test.com/lithology/AZ> ,
+        <http://test.com/lithology/BA> ,
+        <http://test.com/lithology/BI> ,
+        <http://test.com/lithology/BN> ,
+        <http://test.com/lithology/BT> ,
+        <http://test.com/lithology/CA> ,
+        <http://test.com/lithology/CB> ,
+        <http://test.com/lithology/CC> ,
+        <http://test.com/lithology/CD> ,
+        <http://test.com/lithology/CH> ,
+        <http://test.com/lithology/CL> ,
+        <http://test.com/lithology/CM> ,
+        <http://test.com/lithology/CO> ,
+        <http://test.com/lithology/CP> ,
+        <http://test.com/lithology/CS> ,
+        <http://test.com/lithology/CU> ,
+        <http://test.com/lithology/CV> ,
+        <http://test.com/lithology/CY> ,
+        <http://test.com/lithology/DM> ,
+        <http://test.com/lithology/EP> ,
+        <http://test.com/lithology/FS> ,
+        <http://test.com/lithology/FU> ,
+        <http://test.com/lithology/GA> ,
+        <http://test.com/lithology/GR> ,
+        <http://test.com/lithology/GY> ,
+        <http://test.com/lithology/HB> ,
+        <http://test.com/lithology/HE> ,
+        <http://test.com/lithology/HS> ,
+        <http://test.com/lithology/IL> ,
+        <http://test.com/lithology/KA> ,
+        <http://test.com/lithology/KF> ,
+        <http://test.com/lithology/LI> ,
+        <http://test.com/lithology/LU> ,
+        <http://test.com/lithology/MA> ,
+        <http://test.com/lithology/MN> ,
+        <http://test.com/lithology/MO> ,
+        <http://test.com/lithology/MS> ,
+        <http://test.com/lithology/MT> ,
+        <http://test.com/lithology/MV> ,
+        <http://test.com/lithology/OL> ,
+        <http://test.com/lithology/OM> ,
+        <http://test.com/lithology/OR> ,
+        <http://test.com/lithology/PG> ,
+        <http://test.com/lithology/PH> ,
+        <http://test.com/lithology/PL> ,
+        <http://test.com/lithology/PX> ,
+        <http://test.com/lithology/PY> ,
+        <http://test.com/lithology/QZ> ,
+        <http://test.com/lithology/SB> ,
+        <http://test.com/lithology/SE> ,
+        <http://test.com/lithology/SL> ,
+        <http://test.com/lithology/SM> ,
+        <http://test.com/lithology/SP> ,
+        <http://test.com/lithology/SR> ,
+        <http://test.com/lithology/ST> ,
+        <http://test.com/lithology/SU> ,
+        <http://test.com/lithology/TA> ,
+        <http://test.com/lithology/TM> ,
+        <http://test.com/lithology/TN> ,
+        <http://test.com/lithology/TT> ,
+        <http://test.com/lithology/UM> ,
+        <http://test.com/lithology/WF> ,
+        <http://test.com/lithology/WO> ;
+    skos:prefLabel "Dataset http://test.com minerals vocabulary" ;
+.
+
+<http://test.com/lithology-cs>
+    a skos:ConceptScheme ;
+    skos:hasTopConcept
+        <http://test.com/lithology/AEOD> ,
+        <http://test.com/lithology/AGGN> ,
+        <http://test.com/lithology/AGLM> ,
+        <http://test.com/lithology/AMPH> ,
+        <http://test.com/lithology/ANBS> ,
+        <http://test.com/lithology/ANTF> ,
+        <http://test.com/lithology/APLT> ,
+        <http://test.com/lithology/ARKS> ,
+        <http://test.com/lithology/ARNT> ,
+        <http://test.com/lithology/AVOL> ,
+        <http://test.com/lithology/BCAR> ,
+        <http://test.com/lithology/BDSD> ,
+        <http://test.com/lithology/BIFM> ,
+        <http://test.com/lithology/BKSH> ,
+        <http://test.com/lithology/BLSD> ,
+        <http://test.com/lithology/BRAD> ,
+        <http://test.com/lithology/BSKM> ,
+        <http://test.com/lithology/BSLT> ,
+        <http://test.com/lithology/BSTF> ,
+        <http://test.com/lithology/CAAR> ,
+        <http://test.com/lithology/CABS> ,
+        <http://test.com/lithology/CACT> ,
+        <http://test.com/lithology/CESC> ,
+        <http://test.com/lithology/CGLM> ,
+        <http://test.com/lithology/CHRT> ,
+        <http://test.com/lithology/CLAY> ,
+        <http://test.com/lithology/COAL> ,
+        <http://test.com/lithology/COLL> ,
+        <http://test.com/lithology/CRTT> ,
+        <http://test.com/lithology/DACT> ,
+        <http://test.com/lithology/DATF> ,
+        <http://test.com/lithology/DIOR> ,
+        <http://test.com/lithology/DLST> ,
+        <http://test.com/lithology/DMCT> ,
+        <http://test.com/lithology/DOLR> ,
+        <http://test.com/lithology/DUNT> ,
+        <http://test.com/lithology/DURI> ,
+        <http://test.com/lithology/ECLG> ,
+        <http://test.com/lithology/EVAP> ,
+        <http://test.com/lithology/FECT> ,
+        <http://test.com/lithology/FILL> ,
+        <http://test.com/lithology/FLSC> ,
+        <http://test.com/lithology/FLST> ,
+        <http://test.com/lithology/FLTF> ,
+        <http://test.com/lithology/FSPO> ,
+        <http://test.com/lithology/FTBR> ,
+        <http://test.com/lithology/GBBR> ,
+        <http://test.com/lithology/GHPH> ,
+        <http://test.com/lithology/GHSC> ,
+        <http://test.com/lithology/GHSH> ,
+        <http://test.com/lithology/GNSS> ,
+        <http://test.com/lithology/GOSS> ,
+        <http://test.com/lithology/GOUG> ,
+        <http://test.com/lithology/GRDI> ,
+        <http://test.com/lithology/GRGN> ,
+        <http://test.com/lithology/GRNT> ,
+        <http://test.com/lithology/GRVL> ,
+        <http://test.com/lithology/GSTN> ,
+        <http://test.com/lithology/GTGN> ,
+        <http://test.com/lithology/GYST> ,
+        <http://test.com/lithology/GYWK> ,
+        <http://test.com/lithology/HBGB> ,
+        <http://test.com/lithology/HBPD> ,
+        <http://test.com/lithology/HBPY> ,
+        <http://test.com/lithology/HFLS> ,
+        <http://test.com/lithology/HYDR> ,
+        <http://test.com/lithology/IMLR> ,
+        <http://test.com/lithology/INSC> ,
+        <http://test.com/lithology/IVLR> ,
+        <http://test.com/lithology/KMBR> ,
+        <http://test.com/lithology/LACU> ,
+        <http://test.com/lithology/LATR> ,
+        <http://test.com/lithology/LATT> ,
+        <http://test.com/lithology/LGNT> ,
+        <http://test.com/lithology/LMST> ,
+        <http://test.com/lithology/MAFI> ,
+        <http://test.com/lithology/MCHT> ,
+        <http://test.com/lithology/MDSD> ,
+        <http://test.com/lithology/MDST> ,
+        <http://test.com/lithology/META> ,
+        <http://test.com/lithology/MFGN> ,
+        <http://test.com/lithology/MFSC> ,
+        <http://test.com/lithology/MGMG> ,
+        <http://test.com/lithology/MGST> ,
+        <http://test.com/lithology/MNDP> ,
+        <http://test.com/lithology/MOGR> ,
+        <http://test.com/lithology/MONB> ,
+        <http://test.com/lithology/MONO> ,
+        <http://test.com/lithology/MRBL> ,
+        <http://test.com/lithology/MSUL> ,
+        <http://test.com/lithology/MYLN> ,
+        <http://test.com/lithology/NORS> ,
+        <http://test.com/lithology/OAMP> ,
+        <http://test.com/lithology/OLGB> ,
+        <http://test.com/lithology/OPYR> ,
+        <http://test.com/lithology/PAMP> ,
+        <http://test.com/lithology/PCTR> ,
+        <http://test.com/lithology/PEGM> ,
+        <http://test.com/lithology/PHGN> ,
+        <http://test.com/lithology/PHOS> ,
+        <http://test.com/lithology/PHPD> ,
+        <http://test.com/lithology/PHYL> ,
+        <http://test.com/lithology/POLB> ,
+        <http://test.com/lithology/POLY> ,
+        <http://test.com/lithology/PORA> ,
+        <http://test.com/lithology/PORD> ,
+        <http://test.com/lithology/PPYX> ,
+        <http://test.com/lithology/PRDT> ,
+        <http://test.com/lithology/PRGN> ,
+        <http://test.com/lithology/PRPH> ,
+        <http://test.com/lithology/PRSH> ,
+        <http://test.com/lithology/PRSL> ,
+        <http://test.com/lithology/PXNT> ,
+        <http://test.com/lithology/PYPR> ,
+        <http://test.com/lithology/QFPG> ,
+        <http://test.com/lithology/QRGG> ,
+        <http://test.com/lithology/QTZT> ,
+        <http://test.com/lithology/QZBG> ,
+        <http://test.com/lithology/QZWK> ,
+        <http://test.com/lithology/RASH> ,
+        <http://test.com/lithology/RDTF> ,
+        <http://test.com/lithology/RHDA> ,
+        <http://test.com/lithology/RHLT> ,
+        <http://test.com/lithology/RYTF> ,
+        <http://test.com/lithology/SAND> ,
+        <http://test.com/lithology/SCHT> ,
+        <http://test.com/lithology/SDMD> ,
+        <http://test.com/lithology/SDST> ,
+        <http://test.com/lithology/SERP> ,
+        <http://test.com/lithology/SHLE> ,
+        <http://test.com/lithology/SICT> ,
+        <http://test.com/lithology/SILT> ,
+        <http://test.com/lithology/SKRN> ,
+        <http://test.com/lithology/SLAT> ,
+        <http://test.com/lithology/SLST> ,
+        <http://test.com/lithology/SPIC> ,
+        <http://test.com/lithology/SPRL> ,
+        <http://test.com/lithology/SSHL> ,
+        <http://test.com/lithology/STPE> ,
+        <http://test.com/lithology/SURF> ,
+        <http://test.com/lithology/SYEN> ,
+        <http://test.com/lithology/SYGN> ,
+        <http://test.com/lithology/TCHS> ,
+        <http://test.com/lithology/TCNS> ,
+        <http://test.com/lithology/TILI> ,
+        <http://test.com/lithology/TLBS> ,
+        <http://test.com/lithology/TNGN> ,
+        <http://test.com/lithology/TRAC> ,
+        <http://test.com/lithology/TRAV> ,
+        <http://test.com/lithology/ULSC> ,
+        <http://test.com/lithology/UMAF> ,
+        <http://test.com/lithology/VEIN> ,
+        <http://test.com/lithology/VOID> ,
+        <http://test.com/lithology/WACK> ,
+        <http://test.com/lithology/XGGN> ;
+    skos:prefLabel "Dataset http://test.com lithology vocabulary" ;
+.
+
+[]    a sosa:ObservationCollection ;
+    sosa:hasMember
+        [
+            a sosa:Observation ;
+            rdfs:label "Structure" ;
+            sosa:observedProperty <https://linked.data.gov.au/def/geosample/structure> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            rdfs:label "Dip Direction" ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:unitCode <http://qudt.org/vocab/unit/DEG> ;
+                    schema:value 360 ;
+                ] ;
+            sosa:observedProperty bore:hasDipDirection ;
+        ] ,
+        [
+            a sosa:Observation ;
+            rdfs:label "Dip" ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:unitCode <http://qudt.org/vocab/unit/DEG> ;
+                    schema:value -70 ;
+                ] ;
+            sosa:observedProperty bore:hasDip ;
+        ] ,
+        [
+            a sosa:Observation ;
+            rdfs:label "Strike" ;
+            sosa:observedProperty <https://linked.data.gov.au/def/geosite/strike> ;
+        ] ; ;
+.
+
+[]    a sosa:ObservationCollection ;
+    sosa:hasMember
+        [
+            a sosa:Observation ;
+            rdfs:label "Weathering" ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:value <https://linked.data.gov.au/def/gsq-geochem/weathering/strongly-weathered> ;
+                ] ;
+            sosa:observedProperty <https://linked.data.gov.au/def/geosample/weathering> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            rdfs:label "Texture" ;
+            sosa:observedProperty <https://linked.data.gov.au/def/geosample/texture> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            rdfs:label "Rock 2" ;
+            sosa:observedProperty <lithology/TMO> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            rdfs:label "Alteration Type" ;
+            rdfs:comment "MODERATE" ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:value <https://linked.data.gov.au/def/gsq-geochem/alteration/kaolinitic-alteration> ;
+                ] ;
+            sosa:observedProperty <https://linked.data.gov.au/def/observable-properties/geological-unit-alteration> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            rdfs:label "Mineral 1" ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:unitCode <http://qudt.org/vocab/unit/PERCENT> ;
+                    schema:value 2.5e+01 ;
+                ] ;
+            sosa:observedProperty <lithology/Qz> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            rdfs:label "Structure" ;
+            sosa:observedProperty <https://linked.data.gov.au/def/geosample/structure> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            rdfs:label "Colour" ;
+            rdfs:comment "mottled" ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:value <https://linked.data.gov.au/def/gsq-geochem/colour/cream> ;
+                ] ;
+            sosa:observedProperty <https://linked.data.gov.au/def/geosample/colour> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            rdfs:label "Grain Size" ;
+            sosa:observedProperty <https://linked.data.gov.au/def/geosample/grainSize> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            rdfs:label "Alteration Mineral 1" ;
+            sosa:observedProperty <lithology/Qz> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            rdfs:label "Rock 1" ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:unitCode <http://qudt.org/vocab/unit/PERCENT> ;
+                    schema:value 1e+02 ;
+                ] ;
+            sosa:observedProperty <lithology/TMO> ;
+        ] ; ;
+.
+
+[]    a sosa:Sample ;
+    sosa:isSampleOf _:N9f48900286c34dc8aec7c99e3fa4d6a9 ; ;
+.
+
+[]    a sosa:ObservationCollection ;
+    rdfs:comment "Nothing much to say" ;
+    sosa:hasMember
+        [
+            a sosa:Observation ;
+            rdfs:label "Recovered Amount" ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:unitCode <http://qudt.org/vocab/unit/M> ;
+                    schema:value 1e+00 ;
+                ] ;
+            sosa:observedProperty <http://qudt.org/vocab/quantitykind/Length> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            rdfs:label "Mineral 1" ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:unitCode <http://qudt.org/vocab/unit/PERCENT> ;
+                    schema:value 2e+01 ;
+                ] ;
+            sosa:observedProperty <lithology/Qz> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            rdfs:label "Weathering" ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:value <https://linked.data.gov.au/def/gsq-geochem/weathering/completely-oxidised> ;
+                ] ;
+            sosa:observedProperty <https://linked.data.gov.au/def/geosample/weathering> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            rdfs:label "Mineral 3" ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:unitCode <http://qudt.org/vocab/unit/PERCENT> ;
+                    schema:value 5e+00 ;
+                ] ;
+            sosa:observedProperty <lithology/Ol> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            rdfs:label "Mineral 2" ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:unitCode <http://qudt.org/vocab/unit/PERCENT> ;
+                    schema:value 1.6e+01 ;
+                ] ;
+            sosa:observedProperty <lithology/Sp> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            rdfs:label "Texture" ;
+            rdfs:comment "Banded" ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:value <https://linked.data.gov.au/def/gsq-geochem/texture/massive> ;
+                ] ;
+            sosa:observedProperty <https://linked.data.gov.au/def/geosample/texture> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            rdfs:label "Alteration Mineral 2" ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:unitCode <http://qudt.org/vocab/unit/PERCENT> ;
+                    schema:value 3e+00 ;
+                ] ;
+            sosa:observedProperty <lithology/As> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            rdfs:label "Rock 1" ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:unitCode <http://qudt.org/vocab/unit/PERCENT> ;
+                    schema:value 8e+01 ;
+                ] ;
+            sosa:observedProperty <lithology/TSD> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            rdfs:label "Rock 2" ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:unitCode <http://qudt.org/vocab/unit/PERCENT> ;
+                    schema:value 2e+01 ;
+                ] ;
+            sosa:observedProperty <lithology/TLC> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            rdfs:label "Grain Size" ;
+            rdfs:comment "Banded" ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:value <https://linked.data.gov.au/def/gsq-geochem/grain-size/silt> ;
+                ] ;
+            sosa:observedProperty <https://linked.data.gov.au/def/geosample/grainSize> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            rdfs:label "Colour" ;
+            rdfs:comment "dark" ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:value <https://linked.data.gov.au/def/gsq-geochem/colour/grey> ;
+                ] ;
+            sosa:observedProperty <https://linked.data.gov.au/def/geosample/colour> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            rdfs:label "Structure" ;
+            rdfs:comment "Banded" ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:value <https://linked.data.gov.au/def/gsq-geochem/structural-feature/bedding> ;
+                ] ;
+            sosa:observedProperty <https://linked.data.gov.au/def/geosample/structure> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            rdfs:label "Alteration Type" ;
+            rdfs:comment "ST" ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:value <https://linked.data.gov.au/def/gsq-geochem/alteration/argillic-alteration> ;
+                ] ;
+            sosa:observedProperty <https://linked.data.gov.au/def/observable-properties/geological-unit-alteration> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            rdfs:label "Vein Composition" ;
+            rdfs:comment "Banded" ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:unitCode <http://qudt.org/vocab/unit/PERCENT> ;
+                    schema:value 1e+00 ;
+                ] ;
+            sosa:observedProperty <lithology/Qz> ;
+        ] ,
+        [
+            a sosa:Observation ;
+            rdfs:label "Alteration Mineral 1" ;
+            sosa:hasResult
+                [
+                    a sosa:Result ;
+                    schema:unitCode <http://qudt.org/vocab/unit/PERCENT> ;
+                    schema:value 1e+01 ;
+                ] ;
+            sosa:observedProperty <lithology/Ka> ;
+        ] ; ;
+.
+
+[]    a skos:Concept ;
+    skos:definition "A testing type" ;
+    skos:inScheme ex:user-defined-vocab ;
+    skos:notation "TESTER" ; ;
+.
+
+_:N3189680f4e454001b5e99c3e5891cfc8
+    schema:marginOfError 5 ;
+    schema:unitCode <http://qudt.org/vocab/unit/DEG> ;
+    schema:value 36 ;
+.
+
+_:N7ad71b737d6546e986ac277ab503f02a
+    schema:unitCode <http://qudt.org/vocab/unit/M> ;
+    schema:value 10 ;
+.
+
+_:Nfdc45e9a72b24846903dfdfda21d0a20
+    schema:marginOfError 5 ;
+    schema:unitCode <http://qudt.org/vocab/unit/DEG> ;
+    schema:value -54 ;
+.
+
+_:N7359380932334c73b7f4b3727a818d98
+    sosa:hasFeatureOfInterest <https://linked.data.gov.au/dataset/gsq-bores/DEF123> ;
+    sosa:hasResult _:Nfdc45e9a72b24846903dfdfda21d0a20 ;
+    sosa:observedProperty bore:hasDip ;
+.
+
+_:N7f6933013c434c97a1bf9f083692df2b
+    sosa:hasFeatureOfInterest <https://linked.data.gov.au/dataset/gsq-bores/DEF123> ;
+    sosa:hasResult _:N7ad71b737d6546e986ac277ab503f02a ;
+    sosa:observedProperty bore:hasTotalDepth ;
+.
+
+_:N9f48900286c34dc8aec7c99e3fa4d6a9
+    a bore:BoreholeInterval ;
+    schema:depth
+        1 ,
+        2 ;
+.
+
+_:Nd1ed88c196dd4734ae586aa9a126f957
+    sosa:hasFeatureOfInterest <https://linked.data.gov.au/dataset/gsq-bores/DEF123> ;
+    sosa:hasResult _:N3189680f4e454001b5e99c3e5891cfc8 ;
+    sosa:observedProperty bore:hasAzimuth ;
+.
