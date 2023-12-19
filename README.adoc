@@ -1,19 +1,27 @@
 = geochemxl
 
-This is a Python module that can be used either on the command line or within other programs as a library that converts Geochemistry Excel Workbooks into RDF data.
+This is a Python package that can be used either on the command line or within other programs as a library that converts Geochemistry Excel Workbooks into RDF data.
 
-This module requires Workbooks to be structured using the templates available from the https://geochem.dev.kurrawong.ai[Geochemistry Data Portal] and currently supports v 3.0+.
+This module requires Workbooks to be structured using templates that are available in the `templates/` directory.
+
+This package is used by the https://geochem.dev.kurrawong.ai[Geochemistry Data Portal]. Go there to use this without installing anything!
 
 == Use
 
+=== Online Use
+
+Use this online at https://geochem.dev.kurrawong.ai[Geochemistry Data Portal].
+
 === Basic Use
 
-The command line command to run this program against `Workbook-X.xlsx` and to produce RDF file `x.ttl` is:
+The command line command to run this program against `Workbook-X.xlsx` and to produce RDF file named `x.ttl` is:
 
 [source]
 ----
-~$ python -W ignore -m geochemxl -o x.ttl Workbook-X.xlsx
+~$ python -m geochemxl -o x.ttl Workbook-X.xlsx
 ----
+
+Run this command from the directory above the `geochemxl` package (the geochemxl directory containing `convert.py`).
 
 Generally:
 
@@ -57,3 +65,62 @@ options:
 
 == Testing
 
+This code uses https://pypi.org/project/pytest/[pytest] to run its test suite. After installing pytest, you can run the entire suite from the command line, from within the directory about the geochemxl module like this:
+
+[source]
+----
+~$ pytest
+----
+
+That's it! You might like to hide annoying warnings:
+
+[source]
+----
+~$ pytest -W ignore
+----
+
+You should see something like this:
+
+[source]
+----
+===================================================================================== test session starts =====================================================================================
+platform darwin -- Python 3.11.0b5, pytest-7.4.3, pluggy-1.3.0
+rootdir: /Users/nick/Work/gsq/geochemxl
+collected 62 items
+
+tests/test_conversion.py .............................................................                                                                                                  [ 98%]
+tests/test_utils.py .                                                                                                                                                                   [100%]
+----
+
+Most of the tests are for conversion methods in the file `geochemxl/conversion.py` and they are in the file `tests/test_conversion.py`. There are a few tests for supporting untilities in `geochemxl/utils.py` in `tests/test_utils.py` too.
+
+=== Test files
+
+Excel workbooks containing single worksheets with static data for testing are stored in the `tests/data/` directory within this directory. In there too is a complete Workbook with information on every sheet that is used for integration tests within `tests/test_conversion.py`.
+
+== Tracking Issues
+
+The issue tracker for this software is online at https://github.com/Kurrawong/geochemxl/issues. Please log all bugs/issues/feature requests there.
+
+== License & Rights
+
+This software was developed by https://kurrawong.ai[KurrawongAI] for the https://www.business.qld.gov.au/industries/mining-energy-water/resources/geoscience-information/gsq[Geological Survey of Queensland]. It is available for free use under terms of the https://creativecommons.org/licenses/by/4.0/[Creative Commons BY 4.0] license, a copy of the deed of which is contained in the file LICENSE in this software's source repository.
+
+This software is all &copy; The State of Queensland, 2023
+
+== Contacts
+
+For general use, please contact:
+
+*Geoscience Information Team* +
+Geological Survey of Queensland +
+Department of Resources +
+Brisbane, QLD, Australia +
+geological_info@resources.qld.gov.au
+
+For all technical matters, software development etc please contact the authors:
+
+*KurrawongAI* + 
+Brisbane Queensland +
+https://kurrawong.ai +
+info@kurrawong.ai 
