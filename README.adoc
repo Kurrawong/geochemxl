@@ -129,7 +129,7 @@ Excel workbooks containing single worksheets with static data for testing are st
 
 == Installation
 
-This package is installed using the https://python-poetry.org/[Poetry] dependency manager.
+This package can be installed using the https://python-poetry.org/[Poetry] dependency manager.
 
 All the supporting packages needed are given in the `pyproject.toml` file and can be installed into a Python virtual environment like this:
 
@@ -137,6 +137,17 @@ All the supporting packages needed are given in the `pyproject.toml` file and ca
 ----
 ~$ poetry init
 ~$ poetry update
+----
+
+You can also install using PIP on Python 3.8+ like this:
+
+[source]
+----
+~$ pip install -U pip
+~$ pip install -r requirements.txt
+(exit your environment and re-enter, to allow some packages to work)
+~$ pytest -W ignore tests
+(to run all tests, ignore warnings)
 ----
 
 == Supporting vocabularies

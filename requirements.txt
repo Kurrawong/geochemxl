@@ -1,0 +1,11 @@
+# use this file for pip installation
+# run pip install -U pip to upgrade PIP first
+# if using Poetry, see pyproject.toml
+openpyxl
+pyshacl
+pyproj
+pytest
+colorama
+utm
+typing
+dateparser
