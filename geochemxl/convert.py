@@ -1027,51 +1027,18 @@ def extract_sheet_drillhole_survey(
                 g.add((t, TIME.inXSDDateTime, survey_date_lit))
                 g.add((s, TIME.hasTime, t))
 
-            depth_obs = BNode()
-            depth_res = BNode()
-            g.add((s, SOSA.hasMember, depth_obs))
-            g.add((depth_obs, SOSA.observedProperty, BORE.hasTotalDepth))
-            g.add((depth_obs, SOSA.hasFeatureOfInterest, drillhole_iri))
-            g.add((drillhole_iri, SOSA.isFeatureOfInterestOf, depth_obs))
-            g.add((depth_obs, SOSA.hasResult, depth_res))
-            g.add((depth_res, SDO.value, survey_depth_lit))
-            g.add((depth_res, SDO.unitCode, URIRef("http://qudt.org/vocab/unit/M")))
+            o, g2 = make_observation(BORE.hasTotalDepth, survey_depth_lit, None, UNITS.M, None, None, drillhole_iri, None)
+            g += g2
 
-            az_obs = BNode()
-            az_res = BNode()
-            g.add((s, SOSA.hasMember, az_obs))
-            g.add((az_obs, SOSA.observedProperty, BORE.hasAzimuth))
-            g.add((az_obs, SOSA.hasFeatureOfInterest, drillhole_iri))
-            g.add((drillhole_iri, SOSA.isFeatureOfInterestOf, az_obs))
-            g.add((az_obs, SOSA.hasResult, az_res))
-            g.add((az_res, SDO.value, azimuth_lit))
-            g.add((az_res, SDO.unitCode, URIRef("http://qudt.org/vocab/unit/DEG")))
+            o, g2 = make_observation(BORE.hasAzimuth, azimuth_lit, None, UNITS.DEG, None, None, drillhole_iri, None, azimuth_accuracy_lit)
+            g += g2
 
-            if azimuth_accuracy is not None:
-                g.add((az_res, SDO.marginOfError, azimuth_accuracy_lit))
-
-            dip_obs = BNode()
-            dip_res = BNode()
-            g.add((s, SOSA.hasMember, dip_obs))
-            g.add((dip_obs, SOSA.observedProperty, BORE.hasDip))
-            g.add((dip_obs, SOSA.hasFeatureOfInterest, drillhole_iri))
-            g.add((drillhole_iri, SOSA.isFeatureOfInterestOf, dip_obs))
-            g.add((dip_obs, SOSA.hasResult, dip_res))
-            g.add((dip_res, SDO.value, dip_lit))
-            g.add((dip_res, SDO.unitCode, URIRef("http://qudt.org/vocab/unit/DEG")))
-
-            if inclination_accuracy is not None:
-                g.add((dip_res, SDO.marginOfError, inclination_accuracy_lit))
+            o, g2 = make_observation(BORE.hasDip, dip_lit, None, UNITS.DEG, None, None, drillhole_iri, None, inclination_accuracy_lit)
+            g += g2
 
             if magnetic_field is not None:
-                mag_obs = BNode()
-                mag_res = BNode()
-                g.add((s, SOSA.hasMember, mag_obs))
-                g.add((mag_obs, SOSA.observedProperty, EX.hasMagneticFieldStrength))
-                g.add((mag_obs, SOSA.hasFeatureOfInterest, drillhole_iri))
-                g.add((mag_obs, SOSA.hasResult, mag_res))
-                g.add((mag_res, SDO.value, magnetic_field_lit))
-                g.add((mag_res, SDO.unitCode, URIRef("http://qudt.org/vocab/unit/NanoT")))
+                o, g2 = make_observation(EX.hasMagneticFieldStrength, magnetic_field_lit, None, UNITS.NanoT, None, None, drillhole_iri, None, inclination_accuracy_lit)
+                g += g2
 
             if data["optional"]["remark"] is not None:
                 g.add((s, RDFS.comment, remark_lit))
@@ -1244,25 +1211,11 @@ def extract_sheet_drillhole_sample(
                 g.add((sample_iri, SOSA.madeBySensor, instrument_type_lit))
 
             if specific_gravity is not None:
-                spec_grav_obs = BNode()
-                spec_grav_res = BNode()
-                g.add((spec_grav_obs, RDF.type, SOSA.Observation))
-                g.add((spec_grav_obs, SOSA.hasFeatureOfInterest, sample_iri))
-                g.add((sample_iri, SOSA.isFeatureOfInterestOf, spec_grav_obs))
-                g.add((spec_grav_obs, SOSA.observedProperty, EX.SpecificGravity))
-                g.add((spec_grav_obs, SOSA.hasResult, spec_grav_res))
-                g.add((spec_grav_res, RDF.type, SOSA.Result))
-                g.add((spec_grav_res, SDO.value, specific_gravity_lit))
+                o, g2 = make_observation(EX.SpecificGravity, specific_gravity_lit, None, UNITS.UNITLESS, None, None, sample_iri)
+                g += g2
             if magnetic_susceptibility is not None:
-                mag_sup_obs = BNode()
-                mag_sup_res = BNode()
-                g.add((mag_sup_obs, RDF.type, SOSA.Observation))
-                g.add((mag_sup_obs, SOSA.hasFeatureOfInterest, sample_iri))
-                g.add((sample_iri, SOSA.isFeatureOfInterestOf, mag_sup_obs))
-                g.add((mag_sup_obs, SOSA.observedProperty, QKINDS.MagneticSusceptability))
-                g.add((mag_sup_obs, SOSA.hasResult, mag_sup_res))
-                g.add((mag_sup_res, RDF.type, SOSA.Result))
-                g.add((mag_sup_res, SDO.value, magnetic_susceptibility_lit))
+                o, g2 = make_observation(QKINDS.MagneticSusceptability, magnetic_susceptibility_lit, None, UNITS.UNITLESS, None, None, sample_iri)
+                g += g2
             if remark is not None:
                 g.add((sample_iri, RDFS.comment, remark_lit))
 
@@ -1482,15 +1435,8 @@ def extract_sheet_surface_sample(
             g.add((sample_iri, SDO.color, soil_colour_iri))
             g.add((sample_iri, EX.ph, soil_colour_iri))
 
-            ph_obs = BNode()
-            ph_res = BNode()
-            g.add((ph_obs, RDF.type, SOSA.Observation))
-            g.add((ph_obs, SOSA.hasFeatureOfInterest, sample_iri))
-            g.add((sample_iri, SOSA.isFeatureOfInterestOf, ph_obs))
-            g.add((ph_obs, SOSA.observedProperty, QKINDS.PH))
-            g.add((ph_obs, SOSA.hasResult, ph_res))
-            g.add((ph_res, RDF.type, SOSA.Result))
-            g.add((ph_res, SDO.value, soil_ph_lit))
+            o, g2 = make_observation(QKINDS.PH, soil_ph_lit, None, UNITS.UNITLESS, None, None, sample_iri)
+            g += g2
 
             geom = BNode()
             g.add((sample_iri, GEO.hasGeometry, geom))  # sdo:location would be the location of the sample now
@@ -1505,25 +1451,11 @@ def extract_sheet_surface_sample(
                 g.add((sample_iri, SOSA.madeBySensor, instrument_type_lit))
 
             if specific_gravity is not None:
-                spec_grav_obs = BNode()
-                spec_grav_res = BNode()
-                g.add((spec_grav_obs, RDF.type, SOSA.Observation))
-                g.add((spec_grav_obs, SOSA.hasFeatureOfInterest, sample_iri))
-                g.add((sample_iri, SOSA.isFeatureOfInterestOf, spec_grav_obs))
-                g.add((spec_grav_obs, SOSA.observedProperty, EX.SpecificGravity))
-                g.add((spec_grav_obs, SOSA.hasResult, spec_grav_res))
-                g.add((spec_grav_res, RDF.type, SOSA.Result))
-                g.add((spec_grav_res, SDO.value, specific_gravity_lit))
+                o, g2 = make_observation(EX.SpecificGravity, specific_gravity_lit, None, UNITS.UNITLESS, None, None, sample_iri)
+                g += g2
             if magnetic_susceptibility is not None:
-                mag_sup_obs = BNode()
-                mag_sup_res = BNode()
-                g.add((mag_sup_obs, RDF.type, SOSA.Observation))
-                g.add((mag_sup_obs, SOSA.hasFeatureOfInterest, sample_iri))
-                g.add((sample_iri, SOSA.isFeatureOfInterestOf, mag_sup_obs))
-                g.add((mag_sup_obs, SOSA.observedProperty, QKINDS.MagneticSusceptability))
-                g.add((mag_sup_obs, SOSA.hasResult, mag_sup_res))
-                g.add((mag_sup_res, RDF.type, SOSA.Result))
-                g.add((mag_sup_res, SDO.value, magnetic_susceptibility_lit))
+                o, g2 = make_observation(QKINDS.MagneticSusceptability, magnetic_susceptibility_lit, None, UNITS.UNITLESS, None, None, sample_iri)
+                g += g2
             if remark is not None:
                 g.add((sample_iri, RDFS.comment, remark_lit))
 
@@ -1613,7 +1545,7 @@ def extract_sheet_sample_preparation(
 
                 # make RDFLib objects of the values
                 job_number_iri = URIRef(Namespace(dataset_iri + "/jobNumber/") + job_number)
-                laboratory_iri = URIRef(Namespace(dataset_iri + "/lab/" + laboratory_names_and_ids[laboratory_name]))
+                laboratory_iri = laboratory_names_and_ids[laboratory_name]
                 sample_prep_codes_iris = [URIRef(Namespace(dataset_iri + "/samplePrepCode/") + x) for x in sample_prep_codes]
                 assay_code_iri = URIRef(Namespace(dataset_iri + "/assayCode/") + assay_code)
                 sample_iri = make_rdflib_type(sample_id, "URIRef", None, Namespace(dataset_iri + "/sample/"))
@@ -1739,7 +1671,7 @@ def extract_sheet_geochemistry_meta(
 
                 # make RDFLib objects of the values
                 job_number_iri = URIRef(Namespace(dataset_iri + "/jobNumber/") + job_number)
-                laboratory_iri = URIRef(Namespace(dataset_iri + "/lab/" + laboratory_names_and_ids[laboratory_name]))
+                laboratory_iri = laboratory_names_and_ids[laboratory_name]
                 assay_code_iri = URIRef(Namespace(dataset_iri + "/assayCode/") + assay_code)
                 analyte_code_iri = URIRef(Namespace(dataset_iri + "/analyteCode/") + analyte_code)
                 unit_of_measure_iri = make_rdflib_type(unit_of_measure, "Concept", combined_concepts)
@@ -1862,22 +1794,10 @@ def extract_sheet_sample_geochemistry(
 
                 # make the graph
                 g.add((dataset_iri, SDO.hasPart, job_number_iri))
+                g.add((job_number_iri, RDF.type, SOSA.ObservationCollection))
 
-                obs = BNode()
-                g.add((obs, RDF.type, SOSA.Observation))
-                g.add((job_number_iri, SOSA.hasMember, obs))
-
-                g.add((obs, SOSA.hasFeatureOfInterest, sample_iri))
-
-                g.add((obs, SOSA.usedProcedure, assay_code_iri))
-
-                g.add((obs, SOSA.observedProperty, analyte_code_iri))
-
-                r = BNode()
-                g.add((r, RDF.type, SOSA.Result))
-                g.add((r, SDO.value, result_lit))
-
-                g.add((obs, SOSA.hasResult, r))
+                o, g2 = make_observation(analyte_code_iri, result_lit, None, UNITS.UNITLESS, None, job_number_iri, sample_iri, assay_code_iri)
+                g += g2
 
                 row += 1
         else:
@@ -1971,7 +1891,7 @@ def extract_sheet_qaqc_meta(
 
                 # make RDFLib objects of the values
                 job_number_iri = URIRef(Namespace(dataset_iri + "/jobNumber/") + job_number)
-                laboratory_iri = URIRef(Namespace(dataset_iri + "/lab/" + laboratory_names_and_ids[laboratory_name]))
+                laboratory_iri = laboratory_names_and_ids[laboratory_name]
                 assay_code_iri = URIRef(Namespace(dataset_iri + "/assayCode/") + assay_code)
                 analyte_code_iri = URIRef(Namespace(dataset_iri + "/analyteCode/") + analyte_code)
                 unit_of_measure_iri = make_rdflib_type(unit_of_measure, "Concept", combined_concepts)
@@ -2119,19 +2039,11 @@ def extract_sheet_qaqc_geochemistry(
 
                 obs = BNode()
                 g.add((obs, RDF.type, SOSA.Observation))
+                g.add((job_number_iri, RDF.type, SOSA.ObservationCollection))
                 g.add((job_number_iri, SOSA.hasMember, obs))
 
-                g.add((obs, SOSA.hasFeatureOfInterest, sample_iri))
-
-                g.add((obs, SOSA.usedProcedure, assay_code_iri))
-
-                g.add((obs, SOSA.observedProperty, analyte_code_iri))
-
-                r = BNode()
-                g.add((r, RDF.type, SOSA.Result))
-                g.add((r, SDO.value, result_lit))
-
-                g.add((obs, SOSA.hasResult, r))
+                o, g2 = make_observation(analyte_code_iri, result_lit, None, UNITS.UNITLESS, None, job_number_iri, sample_iri, assay_code_iri)
+                g += g2
 
                 g.add((sample_iri, SOSA.isSampleOf, orig_sample_iri))
                 g.add((sample_iri, SDO.additionalType, qaqc_type_iri))
@@ -2253,24 +2165,13 @@ def extract_sheet_sample_pxrf(
                 # make the graph
                 g.add((dataset_iri, SDO.hasPart, sample_iri))
 
-                obs = BNode()
-                g.add((obs, RDF.type, SOSA.Observation))
-                g.add((obs, SOSA.hasFeatureOfInterest, sample_iri))
-                g.add((obs_col_bn, SOSA.hasMember, obs))
-
                 procedure_bn = BNode()
                 g.add((procedure_bn, RDF.type, SOSA.Procedure))
                 g.add((procedure_bn, SDO.name, Literal("XRF Analysis")))
                 g.add((procedure_bn, SDO.description, procedure_lit))
-                g.add((obs, SOSA.usedProcedure, procedure_bn))
 
-                g.add((obs, SOSA.observedProperty, analyte_code_iri))
-
-                r = BNode()
-                g.add((r, RDF.type, SOSA.Result))
-                g.add((r, SDO.unitCode, uom_iri))
-                g.add((r, SDO.value, result_lit))
-                g.add((obs, SOSA.hasResult, r))
+                o, g2 = make_observation(analyte_code_iri, result_lit, None, uom_iri, None, None, sample_iri, procedure_bn)
+                g += g2
 
                 row += 1
         else:
@@ -2805,31 +2706,31 @@ def extract_sheet_drillhole_lithology(
                 g.add((oc, RDF.type, SOSA.ObservationCollection))
 
                 length = URIRef("http://qudt.org/vocab/quantitykind/Length")
-                m = URIRef("http://qudt.org/vocab/unit/M")
-                pc = URIRef("http://qudt.org/vocab/unit/PERCENT")
+                m = UNITS.M
+                pc = UNITS.PERCENT
                 alteration = URIRef("https://linked.data.gov.au/def/observable-properties/geological-unit-alteration")
 
                 material_observations = [
                     # name, op, value, unit, desc
                     (Literal("Recovered Amount"), length, recovered_amount_lit, m, None),
-                    (Literal("Weathering"), GEOSAMPLE.weathering, weathering_iri, None, None),
-                    (Literal("Colour"), GEOSAMPLE.colour, colour_iri, None, colour_shade_lit),
+                    (Literal("Weathering"), GEOSAMPLE.weathering, weathering_iri, UNITS["NONE"], None),
+                    (Literal("Colour"), GEOSAMPLE.colour, colour_iri, UNITS["NONE"], colour_shade_lit),
                     (Literal("Rock 1"), rock_1_iri, rock_1_abund_lit, pc, None),
                     (Literal("Rock 2"), rock_2_iri, rock_2_abund_lit, pc, None),
                     (Literal("Mineral 1"), min_1_iri, min_1_abund_lit, pc, None),
                     (Literal("Mineral 2"), min_2_iri, min_2_abund_lit, pc, None),
                     (Literal("Mineral 3"), min_3_iri, min_3_abund_lit, pc, None),
-                    (Literal("Alteration Type"), alteration, alt_type_iri, None, alt_intensity_lit),
+                    (Literal("Alteration Type"), alteration, alt_type_iri, UNITS["NONE"], alt_intensity_lit),
                     (Literal("Alteration Mineral 1"), alt_min_1_iri, alt_min_1_abund_lit, pc, None),
                     (Literal("Alteration Mineral 2"), alt_min_2_iri, alt_min_2_abund_lit, pc, None),
                     (Literal("Vein Composition"), vein_composition_iri, vein_percent_lit, pc, vein_description_lit),
-                    (Literal("Structure"), GEOSAMPLE.structure, structure_iri, None, vein_description_lit),
-                    (Literal("Texture"), GEOSAMPLE.texture, texture_iri, None, vein_description_lit),
-                    (Literal("Grain Size"), GEOSAMPLE.grainSize, grain_size_iri, None, vein_description_lit),
+                    (Literal("Structure"), GEOSAMPLE.structure, structure_iri, UNITS["NONE"], vein_description_lit),
+                    (Literal("Texture"), GEOSAMPLE.texture, texture_iri, UNITS["NONE"], vein_description_lit),
+                    (Literal("Grain Size"), GEOSAMPLE.grainSize, grain_size_iri, UNITS["NONE"], vein_description_lit),
                 ]
 
                 for n, op, v, u, d in material_observations:
-                    g2 = make_observation(oc, n, op, v, u, d)
+                    o, g2 = make_observation(op, v, n, u, d, oc)
                     if g2 is not None:
                         g += g2
 
@@ -2964,7 +2865,7 @@ def extract_sheet_drillhole_structure(
             material_observations = [
                 # name, op, value, unit, desc
                 (Literal("Depth"), SDO.depth, measurement_depth_lit, UNITS.M, None),
-                (Literal("Structure"), GEOSAMPLE.structure, structure_iri, None, None),
+                (Literal("Structure"), GEOSAMPLE.structure, structure_iri, UNITS["NONE"], None),
                 (Literal("Dip"), BORE.hasDip, dip_lit, UNITS.DEG, None),
                 (Literal("Dip Direction"), BORE.hasDipDirection, dip_direction_lit, UNITS.DEG, None),
                 (Literal("Alpha Angle"), BORE.hasAlphaAngle, alpha_angle_lit, UNITS.DEG, None),
@@ -2973,7 +2874,7 @@ def extract_sheet_drillhole_structure(
             ]
 
             for n, op, v, u, d in material_observations:
-                g2 = make_observation(oc, n, op, v, u, d)
+                o, g2 = make_observation(op, v, n, u, d, oc)
                 if g2 is not None:
                     g += g2
 
@@ -3436,29 +3337,29 @@ def extract_sheet_surface_lithology(
                 oc = BNode()
                 g.add((oc, RDF.type, SOSA.ObservationCollection))
 
-                pc = URIRef("http://qudt.org/vocab/unit/PERCENT")
+                pc = UNITS.PERCENT
                 alteration = URIRef("https://linked.data.gov.au/def/observable-properties/geological-unit-alteration")
 
                 material_observations = [
                     # name, op, value, unit, desc
-                    (Literal("Weathering"), GEOSAMPLE.weathering, weathering_iri, None, None),
-                    (Literal("Colour"), GEOSAMPLE.colour, colour_iri, None, colour_shade_lit),
+                    (Literal("Weathering"), GEOSAMPLE.weathering, weathering_iri, UNITS["NONE"], None),
+                    (Literal("Colour"), GEOSAMPLE.colour, colour_iri, UNITS["NONE"], colour_shade_lit),
                     (Literal("Rock 1"), rock_1_iri, rock_1_abund_lit, pc, None),
                     (Literal("Rock 2"), rock_2_iri, rock_2_abund_lit, pc, None),
                     (Literal("Mineral 1"), min_1_iri, min_1_abund_lit, pc, None),
                     (Literal("Mineral 2"), min_2_iri, min_2_abund_lit, pc, None),
                     (Literal("Mineral 3"), min_3_iri, min_3_abund_lit, pc, None),
-                    (Literal("Alteration Type"), alteration, alt_type_iri, None, alt_intensity_lit),
+                    (Literal("Alteration Type"), alteration, alt_type_iri, UNITS["NONE"], alt_intensity_lit),
                     (Literal("Alteration Mineral 1"), alt_min_1_iri, alt_min_1_abund_lit, pc, None),
                     (Literal("Alteration Mineral 2"), alt_min_2_iri, alt_min_2_abund_lit, pc, None),
                     (Literal("Vein Composition"), vein_composition_iri, vein_percent_lit, pc, vein_description_lit),
-                    (Literal("Structure"), GEOSAMPLE.structure, structure_iri, None, None),
-                    (Literal("Texture"), GEOSAMPLE.texture, texture_iri, None, None),
-                    (Literal("Grain Size"), GEOSAMPLE.grainSize, grain_size_iri, None, None),
+                    (Literal("Structure"), GEOSAMPLE.structure, structure_iri, UNITS["NONE"], None),
+                    (Literal("Texture"), GEOSAMPLE.texture, texture_iri, UNITS["NONE"], None),
+                    (Literal("Grain Size"), GEOSAMPLE.grainSize, grain_size_iri, UNITS["NONE"], None),
                 ]
 
                 for n, op, v, u, d in material_observations:
-                    g2 = make_observation(oc, n, op, v, u, d)
+                    o, g2 = make_observation(op, v, n, u, d, oc)
                     if g2 is not None:
                         g += g2
 
@@ -3647,14 +3548,14 @@ def extract_sheet_surface_structure(
 
                 material_observations = [
                     # name, op, value, unit, desc
-                    (Literal("Structure"), GEOSAMPLE.structure, structure_iri, None, None),
-                    (Literal("Strike"), GEOSITE.strike, strike_lit, None, None),
+                    (Literal("Structure"), GEOSAMPLE.structure, structure_iri, UNITS["NONE"], None),
+                    (Literal("Strike"), GEOSITE.strike, strike_lit, UNITS["NONE"], None),
                     (Literal("Dip"), BORE.hasDip, dip_lit, UNITS.DEG, None),
                     (Literal("Dip Direction"), BORE.hasDipDirection, dip_direction_lit, UNITS.DEG, None),
                 ]
 
                 for n, op, v, u, d in material_observations:
-                    g2 = make_observation(oc, n, op, v, u, d)
+                    o, g2 = make_observation(op, v, n, u, d, oc)
                     if g2 is not None:
                         g += g2
 
@@ -3862,7 +3763,6 @@ def workbook_to_rdf(
 
     grf, dataset_iri = extract_sheet_dataset_metadata(wb, cc)
     grf: Graph
-    dataset_iri: URIRef
 
     validate_sheet_validation_dictionary(wb, cc)
     grf += extract_sheet_user_dictionary(wb, template_version)
@@ -4101,6 +4001,10 @@ def main(args=None):
             if not args.file_to_convert.suffix.lower().endswith(tuple(EXCEL_FILE_ENDINGS)):
                 raise ConversionError("Only Excel files can be converted")
             else:
+                if args.sheet is not None:
+                    print("Sorry, the option to select a single sheet to process is not enabled yet")
+                    exit()
+
                 wb = load_workbook(args.file_to_convert)
                 cc = Graph().parse(Path(__file__).parent.parent / "tests" / "data" / "3.0" / "concepts-combined.ttl")
 
@@ -4124,7 +4028,7 @@ def main(args=None):
                         try:
                             g, dataset_iri = workbook_to_rdf(wb, cc)
                             g.base = dataset_iri + "/"
-                            g.serialize(destination=str(args.outputfile), format="longturtle")
+                            g.serialize(destination=str(args.outputfile), format="turtle")
                         except ConversionError as err:
                             logging.error("{0}".format(err))
                             return 1
@@ -4132,7 +4036,7 @@ def main(args=None):
                     try:
                         g, dataset_iri = workbook_to_rdf(wb, cc)
                         g.base = dataset_iri + "/"
-                        print(g.serialize(format="longturtle"))
+                        print(g.serialize(format="turtle"))
                     except ConversionError as err:
                         logging.error("{0}".format(err))
                         return 1

@@ -369,9 +369,9 @@ class TestExtractSheetSamplePreparation30:
     def test_01_valid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-SAMPLE_PREPARATION_01_valid.xlsx")
         labs = {
-            "ABC Corp (GC)": "abc-corp-gc",
-            "ABC Corp": "abc-corp",
-            "DEF Corp": "def-corp",
+            "ABC Corp (GC)": URIRef("http://example.com/abc-corp-gc"),
+            "ABC Corp": URIRef("http://example.com/abc-corp"),
+            "DEF Corp": URIRef("http://example.com/def-corp"),
         }
         sample_ids = [
             "SSABCD",
@@ -393,9 +393,9 @@ class TestExtractSheetSamplePreparation30:
     def test_02_invalid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-SAMPLE_PREPARATION_02_invalid.xlsx")
         labs = {
-            "ABC Corp (GC)": "abc-corp-gc",
-            "ABC Corp": "abc-corp",
-            "DEF Corp": "def-corp",
+            "ABC Corp (GC)": URIRef("http://example.com/abc-corp-gc"),
+            "ABC Corp": URIRef("http://example.com/abc-corp"),
+            "DEF Corp": URIRef("http://example.com/def-corp"),
         }
         sample_ids = [
             "SSABCD",
@@ -418,9 +418,9 @@ class TestExtractSheetGeochemistryMeta30:
     def test_01_valid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-GEOCHEMISTRY_META_01_valid.xlsx")
         labs = {
-            "ABC Corp (GC)": "abc-corp-gc",
-            "GeoChem Labs Pty Ltd": "geochem-labs",
-            "DEF Corp": "def-corp",
+            "ABC Corp (GC)": URIRef("http://example.com/abc-corp-gc"),
+            "ABC Corp": URIRef("http://example.com/abc-corp"),
+            "DEF Corp": URIRef("http://example.com/def-corp"),
         }
         job_numbers = [
             "JOB_27"
@@ -433,9 +433,9 @@ class TestExtractSheetGeochemistryMeta30:
     def test_02_invalid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-GEOCHEMISTRY_META_02_invalid.xlsx")
         labs = {
-            "ABC Corp (GC)": "abc-corp-gc",
-            "GeoChem Labs Pty Ltd": "geochem-labs",
-            "DEF Corp": "def-corp",
+            "ABC Corp (GC)": URIRef("http://example.com/abc-corp-gc"),
+            "ABC Corp": URIRef("http://example.com/abc-corp"),
+            "DEF Corp": URIRef("http://example.com/def-corp"),
         }
         job_numbers = [
             "JOB_27"
@@ -478,9 +478,9 @@ class TestExtractSheetQaqcMeta30:
     def test_01_valid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-QAQC_META_01_valid.xlsx")
         labs = {
-            "ABC Corp (GC)": "abc-corp-gc",
-            "GeoChem Labs Pty Ltd": "geochem-labs",
-            "DEF Corp": "def-corp",
+            "ABC Corp (GC)": URIRef("http://example.com/abc-corp-gc"),
+            "ABC Corp": URIRef("http://example.com/abc-corp"),
+            "DEF Corp": URIRef("http://example.com/def-corp"),
         }
         job_numbers = [
             "JOB_27"
@@ -493,9 +493,9 @@ class TestExtractSheetQaqcMeta30:
     def test_02_invalid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-QAQC_META_02_invalid.xlsx")
         labs = {
-            "ABC Corp (GC)": "abc-corp-gc",
-            "GeoChem Labs Pty Ltd": "geochem-labs",
-            "DEF Corp": "def-corp",
+            "ABC Corp (GC)": URIRef("http://example.com/abc-corp-gc"),
+            "ABC Corp": URIRef("http://example.com/abc-corp"),
+            "DEF Corp": URIRef("http://example.com/def-corp"),
         }
         job_numbers = [
             "JOB_27"
@@ -793,6 +793,6 @@ class TestIntegration30:
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "GeochemXL-3.0-integration.xlsx")
         g, dataset_iri = workbook_to_rdf(wb, self._make_cc)
 
-        assert len(g) == 1979
+        assert len(g) == 2027
 
         assert type(dataset_iri) == URIRef

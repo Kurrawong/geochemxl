@@ -480,24 +480,45 @@ def make_rdflib_type(
         return Literal(value, datatype=XSD.boolean)
 
 
-def make_observation(oc: Union[URIRef, BNode], name: Literal, op: URIRef, v: Union[URIRef, Literal], u: URIRef, desc: Literal) -> Graph:
-    if op is not None:
-        g = Graph()
+def make_observation(
+        observed_property: URIRef,
+        result_value: Union[URIRef, Literal] = None,
+        name: Literal = None,
+        unit_code: URIRef = UNITS.UNITLESS,
+        desc: Literal = None,
+        observation_collection_iri: Union[URIRef, BNode] = None,
+        foi_iri: URIRef = None,
+        procedure_iri: Union[URIRef, BNode] = None,
+        margin_of_error: Literal = None
+) -> (URIRef, Graph):
+    g = Graph()
+    o = BNode()
 
-        o = BNode()
+    if observed_property is not None:
         g.add((o, RDF.type, SOSA.Observation))
-        g.add((o, RDFS.label, name))
+        if name is not None:
+            g.add((o, RDFS.label, name))
         if desc is not None:
             g.add((o, RDFS.comment, desc))
-        g.add((o, SOSA.observedProperty, op))
-        if v is not None:
-            r = BNode()
-            g.add((r, RDF.type, SOSA.Result))
-            g.add((r, SDO.value, v))
-            if u is not None:
-                g.add((r, SDO.unitCode, u))
-            g.add((o, SOSA.hasResult, r))
-        g.add((oc, SOSA.hasMember, o))
+        g.add((o, SOSA.observedProperty, observed_property))
 
-        return g
-    return None
+        r = BNode()
+        g.add((r, RDF.type, SOSA.Result))
+        if result_value is not None:
+            g.add((r, SDO.value, result_value))
+        g.add((r, SDO.unitCode, unit_code))
+        if margin_of_error is not None:
+            g.add((r, SDO.marginOfError, margin_of_error))
+        g.add((o, SOSA.hasResult, r))
+
+        if observation_collection_iri is not None:
+            g.add((observation_collection_iri, SOSA.hasMember, o))
+
+        if foi_iri is not None:
+            g.add((o, SOSA.hasFeatureOfInterest, foi_iri))
+            g.add((foi_iri, SOSA.isFeatureOfInterestOf, o))
+
+        if procedure_iri is not None:
+            g.add((o, SOSA.usedProcedure, procedure_iri))
+
+    return o, g
