@@ -8,6 +8,7 @@ from pyproj import Transformer
 from rdflib import Namespace, Seq
 from rdflib.namespace import GEO
 import dateparser
+import warnings
 
 from .defined_namespaces import MININGROLES, TENEMENT, TENEMENTS, QLDBORES, QKINDS, GEOSAMPLE, GEOSITE
 
@@ -4032,101 +4033,106 @@ def make_parser(args):
 
 
 def main(args=None):
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        warnings.warn("deprecated", DeprecationWarning)
 
-    if args is None:  # run via entrypoint
-        args = sys.argv[1:]
+        if args is None:  # run via entrypoint
+            args = sys.argv[1:]
 
-    args = make_parser(args)
+        args = make_parser(args)
 
-    if not args:
-        # show help if no args are given
-        args.print_help()
-        args.exit()
-    elif args.info:
-        from .__init__ import __version__
+        if not args:
+            # show help if no args are given
+            args.print_help()
+            args.exit()
+        elif args.info:
+            from .__init__ import __version__
 
-        print(f"geochemxl version: {__version__}")
-        from .utils import KNOWN_TEMPLATE_VERSIONS
+            print(f"geochemxl version: {__version__}")
+            from .utils import KNOWN_TEMPLATE_VERSIONS
 
-        print(
-            f"Known template versions: {', '.join(sorted(KNOWN_TEMPLATE_VERSIONS, reverse=True))}"
-        )
-    elif args.update_workbook:
-        print("Updating template")
-        if args.file_to_convert is None:
-            raise ValueError("If you select the option '-u', you must specify an Excel file to update")
-        elif not Path(args.file_to_convert).is_file():
-            raise ValueError("Files to update must exist")
-        elif not args.file_to_convert.suffix.lower().endswith(tuple(EXCEL_FILE_ENDINGS)):
-            raise ValueError("Files to update must end in .xslx")
-
-        wb = load_workbook(args.file_to_convert)
-        template_version = get_template_version(wb)
-
-        # test that we have a valid template variable
-        from .utils import KNOWN_TEMPLATE_VERSIONS
-        if template_version not in KNOWN_TEMPLATE_VERSIONS:
-            raise ValueError(
-                f"Unknown Template Version. Known Template Versions are {', '.join(KNOWN_TEMPLATE_VERSIONS)},"
-                f" you supplied {template_version}"
+            print(
+                f"Known template versions: {', '.join(sorted(KNOWN_TEMPLATE_VERSIONS, reverse=True))}"
             )
-        ws = wb["VALIDATION_DICTIONARY"]
+        elif args.update_workbook:
+            print("Updating template")
+            if args.file_to_convert is None:
+                raise ValueError("If you select the option '-u', you must specify an Excel file to update")
+            elif not Path(args.file_to_convert).is_file():
+                raise ValueError("Files to update must exist")
+            elif not args.file_to_convert.suffix.lower().endswith(tuple(EXCEL_FILE_ENDINGS)):
+                raise ValueError("Files to update must end in .xslx")
 
-        for vocab_id, vocab_path in FIELD_VOCABS.items():
-            col = VOCAB_COLUMNS[vocab_id]
-            row = 5
-            for i in make_vocab_a_list_of_notations(vocab_path):
-                ws[f"{col}{row}"] = i
-                row += 1
-
-        from openpyxl.worksheet.datavalidation import DataValidation
-        dv = DataValidation(
-            type="list",
-            formula1="=VALIDATION_DICTIONARY!$J$5:$J$13",
-            showDropDown=False
-        )
-        ws2 = wb["DRILLHOLE_SAMPLE"]
-        ws2.add_data_validation(dv)
-
-        print(create_vocab_validation_formula(wb, "VALIDATION_DICTIONARY", "DRILL_TYPE"))
-        print(create_vocab_validation_formula(wb, "DICTIONARY", "CODE"))
-
-        wb.save(Path(args.file_to_convert).with_suffix(".y.xlsx"))
-    elif args.file_to_convert:
-        # input file looks like an Excel file, so convert Excel -> RDF
-        if not args.file_to_convert.suffix.lower().endswith(tuple(EXCEL_FILE_ENDINGS)):
-            raise ConversionError("Only Excel files can be converted")
-        else:
             wb = load_workbook(args.file_to_convert)
-            cc = Graph().parse(Path(__file__).parent.parent / "tests" / "data" / "3.0" / "concepts-combined.ttl")
-            g = Graph()
+            template_version = get_template_version(wb)
 
-            if args.outputfile is not None:
-                if args.sheet is not None:
-                    if args.sheet not in SHEETS:
-                        raise ConversionError(
-                            f"The value {args.sheet} you've supplied for the sheet parameter (-s or --sheet) is not "
-                            f"in the list of known worksheets")
-                    print(f"Processing worksheet {args.sheet} only")
+            # test that we have a valid template variable
+            from .utils import KNOWN_TEMPLATE_VERSIONS
+            if template_version not in KNOWN_TEMPLATE_VERSIONS:
+                raise ValueError(
+                    f"Unknown Template Version. Known Template Versions are {', '.join(KNOWN_TEMPLATE_VERSIONS)},"
+                    f" you supplied {template_version}"
+                )
+            ws = wb["VALIDATION_DICTIONARY"]
 
-                    try:
-                        g, dataset_iri = worksheet_to_rdf(wb, cc, sheet=args.sheet)
-                        g.base = dataset_iri + "/"
-                    except ConversionError as err:
-                        logging.error("{0}".format(err))
-                        return 1
+            for vocab_id, vocab_path in FIELD_VOCABS.items():
+                col = VOCAB_COLUMNS[vocab_id]
+                row = 5
+                for i in make_vocab_a_list_of_notations(vocab_path):
+                    ws[f"{col}{row}"] = i
+                    row += 1
 
+            from openpyxl.worksheet.datavalidation import DataValidation
+            dv = DataValidation(
+                type="list",
+                formula1="=VALIDATION_DICTIONARY!$J$5:$J$13",
+                showDropDown=False
+            )
+            ws2 = wb["DRILLHOLE_SAMPLE"]
+            ws2.add_data_validation(dv)
+
+            print(create_vocab_validation_formula(wb, "VALIDATION_DICTIONARY", "DRILL_TYPE"))
+            print(create_vocab_validation_formula(wb, "DICTIONARY", "CODE"))
+
+            wb.save(Path(args.file_to_convert).with_suffix(".y.xlsx"))
+        elif args.file_to_convert:
+            # input file looks like an Excel file, so convert Excel -> RDF
+            if not args.file_to_convert.suffix.lower().endswith(tuple(EXCEL_FILE_ENDINGS)):
+                raise ConversionError("Only Excel files can be converted")
+            else:
+                wb = load_workbook(args.file_to_convert)
+                cc = Graph().parse(Path(__file__).parent.parent / "tests" / "data" / "3.0" / "concepts-combined.ttl")
+
+                if args.outputfile is not None:
+                    if args.sheet is not None:
+                        if args.sheet not in SHEETS:
+                            raise ConversionError(
+                                f"The value {args.sheet} you've supplied for the sheet parameter (-s or --sheet) is not "
+                                f"in the list of known worksheets")
+                        print(f"Processing worksheet {args.sheet} only")
+
+                        try:
+                            g, dataset_iri = worksheet_to_rdf(wb, cc, sheet=args.sheet)
+                            g.base = dataset_iri + "/"
+                        except ConversionError as err:
+                            logging.error("{0}".format(err))
+                            return 1
+                    else:
+                        print(f"Processing workbook {args.file_to_convert}")
+
+                        try:
+                            g, dataset_iri = workbook_to_rdf(wb, cc)
+                            g.base = dataset_iri + "/"
+                            g.serialize(destination=str(args.outputfile), format="longturtle")
+                        except ConversionError as err:
+                            logging.error("{0}".format(err))
+                            return 1
                 else:
-                    print(f"Processing workbook {args.file_to_convert}")
-
                     try:
                         g, dataset_iri = workbook_to_rdf(wb, cc)
                         g.base = dataset_iri + "/"
+                        print(g.serialize(format="longturtle"))
                     except ConversionError as err:
                         logging.error("{0}".format(err))
                         return 1
-
-            if args.outputfile is None:
-                g.serialize(format="longturtle")
-            else:
-                g.serialize(destination=str(args.outputfile), format="longturtle")
