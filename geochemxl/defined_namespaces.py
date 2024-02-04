@@ -86,6 +86,10 @@ class UNITS(DefinedNamespace):
 
     DEG: URIRef
     M: URIRef
+    UNITLESS: URIRef
+    PERCENT: URIRef
+    NanoT: URIRef
+    NONE: URIRef
 
 
 class GEOSITE(DefinedNamespace):
@@ -93,3 +97,11 @@ class GEOSITE(DefinedNamespace):
     _fail = False
 
     strike: URIRef
+
+
+class SOSAX(DefinedNamespace):
+    _NS = Namespace("http://www.w3.org/ns/sosa/")
+    _fail = True
+
+    ObservationCollection: URIRef
+    hasMember: URIRef

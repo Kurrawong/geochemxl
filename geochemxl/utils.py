@@ -14,7 +14,7 @@ from openpyxl.workbook.workbook import Workbook
 from pyshacl.pytypes import GraphLike
 from rdflib import BNode, Graph, Literal, Namespace, URIRef
 from rdflib.namespace import DCAT, DCTERMS, PROV, RDF, RDFS, SKOS, XSD, TIME, SOSA, SDO
-from .defined_namespaces import BORE, FOIS, SAMPLES, UNITS
+from .defined_namespaces import BORE, FOIS, SAMPLES, UNITS, SOSAX
 import utm
 
 EXCEL_FILE_ENDINGS = ["xlsx"]
@@ -512,7 +512,7 @@ def make_observation(
         g.add((o, SOSA.hasResult, r))
 
         if observation_collection_iri is not None:
-            g.add((observation_collection_iri, SOSA.hasMember, o))
+            g.add((observation_collection_iri, SOSAX.hasMember, o))
 
         if foi_iri is not None:
             g.add((o, SOSA.hasFeatureOfInterest, foi_iri))
