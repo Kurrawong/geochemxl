@@ -35,20 +35,20 @@ class TestValidateSheetValidationDictionary30:
     def test_01_invalid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-VALIDATION_DICTIONARY_01_invalid.xlsx")
         try:
-            validate_sheet_validation_dictionary(wb, self._make_cc, "3.0")
+            validate_sheet_validation_dictionary(wb, URIRef("http://example.com/dataset/x"), self._make_cc, "3.0")
         except ConversionError as e:
             assert str(e) == "Code xx in codelist LOC_SURVEY_TYPE on worksheet VALIDATION_DICTIONARY is not known"
 
     def test_02_valid(self):
         # code xx is defined by user
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-VALIDATION_DICTIONARY_02_valid.xlsx")
-        validate_sheet_validation_dictionary(wb, self._make_cc, "3.0")
+        validate_sheet_validation_dictionary(wb, URIRef("http://example.com/dataset/x"), self._make_cc, "3.0")
 
     def test_03_invalid(self):
         # code xx is incorrectly defined as xy by user
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-VALIDATION_DICTIONARY_03_invalid.xlsx")
         try:
-            validate_sheet_validation_dictionary(wb, self._make_cc, "3.0")
+            validate_sheet_validation_dictionary(wb, URIRef("http://example.com/dataset/x"), self._make_cc, "3.0")
         except ConversionError as e:
             assert str(e) == "Code xx in codelist LOC_SURVEY_TYPE on worksheet VALIDATION_DICTIONARY is not known"
 
@@ -60,7 +60,7 @@ class TestExtractSheetUserDictionary30:
 
     def test_01_valid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-USER_DICTIONARY_01_valid.xlsx")
-        g = extract_sheet_user_dictionary(wb, "3.0")
+        g = extract_sheet_user_dictionary(wb, URIRef("http://example.com/dataset/x"), "3.0")
 
         concepts_count = 0
         notations = []
@@ -74,7 +74,7 @@ class TestExtractSheetUserDictionary30:
     def test_02_invalid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-USER_DICTIONARY_02_invalid.xlsx")
         try:
-            extract_sheet_user_dictionary(wb, "3.0")
+            extract_sheet_user_dictionary(wb, URIRef("http://example.com/dataset/x"), "3.0")
         except ConversionError as e:
             assert str(e) == "You must supply a DESCRIPTION value for each code you define in the USER_DICTIONARY sheet"
 
@@ -86,12 +86,12 @@ class TestExtractSheetUom30:
 
     def test_01_valid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-UNITS_OF_MEASURE_01_valid.xlsx")
-        validate_sheet_uom(wb, self._make_cc, "3.0")
+        validate_sheet_uom(wb, URIRef("http://example.com/dataset/x"), self._make_cc, "3.0")
 
     def test_02_valid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-UNITS_OF_MEASURE_02_invalid.xlsx")
         try:
-            validate_sheet_uom(wb, self._make_cc, "3.0")
+            validate_sheet_uom(wb, URIRef("http://example.com/dataset/x"), self._make_cc, "3.0")
         except ConversionError as e:
             assert str(e) == "Code rounds in codelist ROTATION on worksheet UNITS_OF_MEASURE is not known"
 
@@ -103,7 +103,7 @@ class TestExtractSheetUserUom30:
 
     def test_01_valid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-USER_UNITS_OF_MEASURE_01_valid.xlsx")
-        g, notations = extract_sheet_user_uom(wb, self._make_cc, "3.0")
+        g, notations = extract_sheet_user_uom(wb, URIRef("http://example.com/dataset/x"), self._make_cc, "3.0")
 
         concepts_count = 0
         for c in g.subjects(RDF.type, SKOS.Concept):
@@ -117,7 +117,7 @@ class TestExtractSheetUserUom30:
     def test_02_invalid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-USER_UNITS_OF_MEASURE_01_valid.xlsx")
         try:
-            extract_sheet_user_uom(wb, self._make_cc, "3.0")
+            extract_sheet_user_uom(wb, URIRef("http://example.com/dataset/x"), self._make_cc, "3.0")
         except ConversionError as e:
             assert str(e) == "You must supply a DESCRIPTION value for each code you define in the " \
                              "USER_UNITS_OF_MEASURE sheet"
@@ -130,12 +130,12 @@ class TestExtractSheetUserSamplePrepCodes30:
 
     def test_01_valid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-USER_SAMPLE_PREP_CODES_01_valid.xlsx")
-        g, prep_code_ids = extract_sheet_user_sample_prep_codes(wb, URIRef("http://test.com"), "3.0")
+        g, prep_code_ids = extract_sheet_user_sample_prep_codes(wb, URIRef("http://example.com/dataset/x"), "3.0")
 
         assert (
-                   URIRef("http://test.com/user-ConceptScheme-sample-preparations"),
+                   URIRef("http://example.com/dataset/x/user-ConceptScheme-sample-preparations"),
                    SKOS.hasTopConcept,
-                   URIRef("http://test.com/code/D"),
+                   URIRef("http://example.com/dataset/x/code/D"),
                ) in g
 
         assert 'A' in prep_code_ids
@@ -143,7 +143,7 @@ class TestExtractSheetUserSamplePrepCodes30:
     def test_02_invalid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-USER_SAMPLE_PREP_CODES_02_invalid.xlsx")
         try:
-            extract_sheet_user_sample_prep_codes(wb, URIRef("http://test.com"), "3.0")
+            extract_sheet_user_sample_prep_codes(wb, URIRef("http://example.com/dataset/x"), "3.0")
         except ConversionError as e:
             assert str(e) == "For each row in the USER_SAMPLE_PREP_CODES worksheet, you must supply a " \
                              "DESCRIPTION value"
@@ -156,12 +156,12 @@ class TestExtractSheetUserAssayCodes30:
 
     def test_01_valid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-USER_ASSAY_CODES_01_valid.xlsx")
-        g, assay_code_ids = extract_sheet_user_assay_codes(wb, URIRef("http://test.com"), "3.0")
+        g, assay_code_ids = extract_sheet_user_assay_codes(wb, URIRef("http://example.com/dataset/x"), "3.0")
 
         assert (
-                   URIRef("http://test.com/user-ConceptScheme-assays"),
+                   URIRef("http://example.com/dataset/x/user-ConceptScheme-assays"),
                    SKOS.hasTopConcept,
-                   URIRef("http://test.com/code/TTT"),
+                   URIRef("http://example.com/dataset/x/code/TTT"),
                ) in g
 
         assert 'TTT' in assay_code_ids
@@ -169,7 +169,7 @@ class TestExtractSheetUserAssayCodes30:
     def test_02_invalid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-USER_ASSAY_CODES_02_invalid.xlsx")
         try:
-            extract_sheet_user_assay_codes(wb, URIRef("http://test.com"), "3.0")
+            extract_sheet_user_assay_codes(wb, URIRef("http://example.com/dataset/x"), "3.0")
         except ConversionError as e:
             assert str(e) == "For each row in the USER_ASSAY_CODES worksheet, you must supply a " \
                              "DESCRIPTION value"
@@ -182,12 +182,12 @@ class TestExtractSheetUserAnalytes30:
 
     def test_01_valid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-USER_ANALYTES_01_valid.xlsx")
-        g, analyte_ids = extract_sheet_user_analytes(wb, URIRef("http://test.com"), "3.0")
+        g, analyte_ids = extract_sheet_user_analytes(wb, URIRef("http://example.com/dataset/x"), "3.0")
 
         assert (
-                   URIRef("http://test.com/user-ConceptScheme-analytes"),
+                   URIRef("http://example.com/dataset/x/user-ConceptScheme-analytes"),
                    SKOS.hasTopConcept,
-                   URIRef("http://test.com/code/Ag"),
+                   URIRef("http://example.com/dataset/x/code/Ag"),
                ) in g
 
         assert 'Ag' in analyte_ids
@@ -195,7 +195,7 @@ class TestExtractSheetUserAnalytes30:
     def test_02_invalid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-USER_ANALYTES_02_invalid.xlsx")
         try:
-            extract_sheet_user_analytes(wb, URIRef("http://test.com"), "3.0")
+            extract_sheet_user_analytes(wb, URIRef("http://example.com/dataset/x"), "3.0")
         except ConversionError as e:
             assert str(e) == "For each row in the USER_ANALYTES worksheet, you must supply a " \
                              "DESCRIPTION value"
@@ -208,10 +208,10 @@ class TestExtractSheetUserLaboratories30:
 
     def test_01_valid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-USER_LABORATORIES_01_valid.xlsx")
-        g, lab_names_and_ids = extract_sheet_user_laboratories(wb, URIRef("http://test.com"), "3.0")
+        g, lab_names_and_ids = extract_sheet_user_laboratories(wb, URIRef("http://example.com/dataset/x"), "3.0")
 
         assert (
-                   URIRef("http://test.com/lab/ABC-Corp-GC"),
+                   URIRef("http://example.com/dataset/x/lab/ABC-Corp-GC"),
                    RDF.type,
                    SDO.Organization,
                ) in g
@@ -219,7 +219,7 @@ class TestExtractSheetUserLaboratories30:
     def test_02_invalid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-USER_LABORATORIES_02_invalid.xlsx")
         try:
-            extract_sheet_user_laboratories(wb, URIRef("http://test.com"), "3.0")
+            extract_sheet_user_laboratories(wb, URIRef("http://example.com/dataset/x"), "3.0")
         except ConversionError as e:
             assert str(e) == "For each row in the USER_LABORATORIES worksheet, you must supply a " \
                              "LABORATORY_LOCATION value"
@@ -265,7 +265,7 @@ class TestExtractSheetDrillholeLocation30:
 
     def test_01_valid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-DRILLHOLE_LOCATION_01_valid.xlsx")
-        g, drillhole_ids = extract_sheet_drillhole_location(wb, self._make_cc, URIRef("http://test.com"), "3.0")
+        g, drillhole_ids = extract_sheet_drillhole_location(wb, URIRef("http://example.com/dataset/x"), self._make_cc, "3.0")
 
         assert (
                    URIRef("https://linked.data.gov.au/dataset/gsq-bores/DEF123"),
@@ -276,7 +276,7 @@ class TestExtractSheetDrillholeLocation30:
     def test_02_invalid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-DRILLHOLE_LOCATION_02_invalid.xlsx")
         try:
-            extract_sheet_drillhole_location(wb, self._make_cc, URIRef("http://test.com"), "3.0")
+            extract_sheet_drillhole_location(wb, URIRef("http://example.com/dataset/x"), self._make_cc, "3.0")
         except ConversionError as e:
             assert str(e) == "For each row in the DRILLHOLE_LOCATION worksheet, " \
                              "you must supply a PRE_COLLAR_DEPTH value"
@@ -289,7 +289,7 @@ class TestExtractSheetDrillholeSurvey30:
 
     def test_01_valid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-DRILLHOLE_SURVEY_01_valid.xlsx")
-        g = extract_sheet_drillhole_survey(wb, self._make_cc, ["DD1234", "DEF123"], URIRef("http://test.com"))
+        g = extract_sheet_drillhole_survey(wb, URIRef("http://example.com/dataset/x"), self._make_cc, ["DD1234", "DEF123"])
 
         assert (
                    URIRef("https://linked.data.gov.au/dataset/gsq-bores/DD1234"),
@@ -300,7 +300,7 @@ class TestExtractSheetDrillholeSurvey30:
     def test_02_invalid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-DRILLHOLE_SURVEY_02_invalid.xlsx")
         try:
-            extract_sheet_drillhole_survey(wb, self._make_cc, ["DD1234", "DEF123"], URIRef("http://test.com"))
+            extract_sheet_drillhole_survey(wb, URIRef("http://example.com/dataset/x"), self._make_cc, ["DD1234", "DEF123"])
         except ConversionError as e:
             assert str(e) == "The value DD1234x for DRILLHOLE_ID in row 10 of sheet DRILLHOLE_SURVEY is not " \
                              "present on sheet DRILLHOLE_LOCATION in the DRILLHOLE_ID column, as required"
@@ -313,10 +313,10 @@ class TestExtractSheetDrillholeSample30:
 
     def test_01_valid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-DRILLHOLE_SAMPLE_01_valid.xlsx")
-        g, _ = extract_sheet_drillhole_sample(wb, self._make_cc, ["DD1234", "DEF123"], URIRef("http://test.com"))
+        g, _ = extract_sheet_drillhole_sample(wb, URIRef("http://example.com/dataset/x"), self._make_cc, ["DD1234", "DEF123"])
 
         assert (
-                   URIRef("http://test.com/sample/ABC123"),
+                   URIRef("http://example.com/dataset/x/sample/ABC123"),
                    SOSA.isSampleOf,
                    URIRef("https://linked.data.gov.au/dataset/gsq-bores/DEF123"),
                ) in g
@@ -324,14 +324,14 @@ class TestExtractSheetDrillholeSample30:
     def test_02_invalid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-DRILLHOLE_SAMPLE_02_invalid.xlsx")
         try:
-            extract_sheet_drillhole_sample(wb, self._make_cc, ["DD1234", "DEF123"], URIRef("http://test.com"))
+            extract_sheet_drillhole_sample(wb, URIRef("http://example.com/dataset/x"), self._make_cc, ["DD1234", "DEF123"])
         except ConversionError as e:
             assert str(e) == "For each row in the DRILLHOLE_SAMPLE worksheet, you must supply a TO value"
 
     def test_03_invalid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-DRILLHOLE_SAMPLE_03_invalid.xlsx")
         try:
-            extract_sheet_drillhole_sample(wb, self._make_cc, ["DD1234", "DEF123"], URIRef("http://test.com"))
+            extract_sheet_drillhole_sample(wb, URIRef("http://example.com/dataset/x"), self._make_cc, ["DD1234", "DEF123"])
         except ConversionError as e:
             assert str(e) == "The value 3600 for MAGNETIC_SUSCEPTIBILITY in row 10 of sheet DRILLHOLE_SAMPLE is " \
                              "not negative, as required"
@@ -344,10 +344,10 @@ class TestExtractSheetSurfaceSample30:
 
     def test_01_valid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-SURFACE_SAMPLE_01_valid.xlsx")
-        g, _ = extract_sheet_surface_sample(wb, self._make_cc, URIRef("http://test.com"))
+        g, _ = extract_sheet_surface_sample(wb, URIRef("http://example.com/dataset/x"), self._make_cc)
 
         assert (
-                   URIRef("http://test.com/sample/SSABCD"),
+                   URIRef("http://example.com/dataset/x/sample/SSABCD"),
                    SDO.material,
                    URIRef("https://linked.data.gov.au/def/gsq-geochem/sample-material/sediment"),
                ) in g
@@ -355,7 +355,7 @@ class TestExtractSheetSurfaceSample30:
     def test_02_invalid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-SURFACE_SAMPLE_02_invalid.xlsx")
         try:
-            extract_sheet_surface_sample(wb, self._make_cc, URIRef("http://test.com"))
+            extract_sheet_surface_sample(wb, URIRef("http://example.com/dataset/x"), self._make_cc)
         except ConversionError as e:
             assert str(e) == "The value hello for DISPATCH_DATE in row 12 of sheet SURFACE_SAMPLE " \
                              "is not a date as required"
@@ -379,14 +379,13 @@ class TestExtractSheetSamplePreparation30:
             "SSABCF"
         ]
         g, _ = extract_sheet_sample_preparation(
-            wb, labs, ["A", "B", "C", "D"], ["TTTT"], sample_ids, URIRef("http://test.com"), "3.0")
+            wb, URIRef("http://example.com/dataset/x"), labs, ["A", "B", "C", "D"], ["TTTT"], sample_ids, "3.0")
 
         has_expected_foi = False
         for oc in g.subjects(RDF.type, SOSA.ObservationCollection):
-            for o in g.objects(oc, SOSA.hasMember):
-                for foi in g.objects(o, SOSA.hasFeatureOfInterest):
-                    if foi == URIRef("http://test.com/sample/SSABCE"):
-                        has_expected_foi = True
+            for foi in g.objects(oc, SOSA.hasFeatureOfInterest):
+               if foi == URIRef("http://example.com/dataset/x/sample/SSABCE"):
+                   has_expected_foi = True
 
         assert has_expected_foi
 
@@ -404,7 +403,7 @@ class TestExtractSheetSamplePreparation30:
         ]
         try:
             extract_sheet_sample_preparation(
-                wb, labs, ["A", "B", "C", "D"], ["TTTT"], sample_ids, URIRef("http://test.com"), "3.0")
+                wb, URIRef("http://example.com/dataset/x"), labs, ["A", "B", "C", "D"], ["TTTT"], sample_ids, "3.0")
         except ConversionError as e:
             assert str(e) == "The value TTTX for ASSAY_CODE in row 15 of sheet SAMPLE_PREPARATION is not " \
                              "defined in the USER_ASSAY_CODES worksheet as required"
@@ -426,7 +425,7 @@ class TestExtractSheetGeochemistryMeta30:
             "JOB_27"
         ]
         g = extract_sheet_geochemistry_meta(
-            wb, job_numbers, labs, ["TTTT"], ["Au"], ["ppm", "ppb"], self._make_cc, URIRef("http://test.com"), "3.0")
+            wb, URIRef("http://example.com/dataset/x"), job_numbers, labs, ["TTTT"], ["Au"], ["ppm", "ppb"], self._make_cc, "3.0")
 
         assert (None, SDO.marginOfError, Literal("0.05")) in g
 
@@ -442,8 +441,7 @@ class TestExtractSheetGeochemistryMeta30:
         ]
         try:
             extract_sheet_geochemistry_meta(
-                wb, job_numbers, labs, ["TTTT"], ["Au"], ["ppm", "ppb"], self._make_cc, URIRef("http://test.com"),
-                "3.0")
+                wb, URIRef("http://example.com/dataset/x"), job_numbers, labs, ["TTTT"], ["Au"], ["ppm", "ppb"], self._make_cc, "3.0")
         except ConversionError as e:
             assert str(e) == "For each row in the GEOCHEMISTRY_META worksheet, you must supply a ACCURACY value"
 
@@ -456,15 +454,15 @@ class TestExtractSheetSampleGeochemistry30:
     def test_01_valid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-SAMPLE_GEOCHEMISTRY_01_valid.xlsx")
         g = extract_sheet_sample_geochemistry(
-            wb, ["JOB_27"], ["SSABCD"], ["TTTT"], ["Ag", "As", "Au"], URIRef("http://test.com"), "3.0")
+            wb, URIRef("http://example.com/dataset/x"), ["JOB_27"], ["SSABCD"], ["TTTT"], ["Ag", "As", "Au"], "3.0")
 
-        assert (None, SOSA.observedProperty, URIRef("http://test.com/analyteCode/Au")) in g
+        assert (None, SOSA.observedProperty, URIRef("http://example.com/dataset/x/analyteCode/Au")) in g
 
     def test_02_invalid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-SAMPLE_GEOCHEMISTRY_02_invalid.xlsx")
         try:
             extract_sheet_sample_geochemistry(
-                wb, ["JOB_27"], ["SSABCD"], ["TTTT"], ["Ag", "As", "Au"], URIRef("http://test.com"), "3.0")
+                wb, URIRef("http://example.com/dataset/x"), ["JOB_27"], ["SSABCD"], ["TTTT"], ["Ag", "As", "Au"], "3.0")
         except ConversionError as e:
             assert str(e) == "The value JB27 for JOB_NUMBER in row 15 of sheet SAMPLE_GEOCHEMISTRY is not present " \
                              "in the SAMPLE_PREPARATION job numbers worksheet as required"
@@ -486,7 +484,7 @@ class TestExtractSheetQaqcMeta30:
             "JOB_27"
         ]
         g = extract_sheet_qaqc_meta(
-            wb, job_numbers, labs, ["TTTT"], ["Au"], ["ppm", "ppb"], self._make_cc, URIRef("http://test.com"), "3.0")
+            wb, URIRef("http://example.com/dataset/x"), job_numbers, labs, ["TTTT"], ["Au"], ["ppm", "ppb"], self._make_cc, "3.0")
 
         assert (None, SDO.marginOfError, Literal("0.05")) in g
 
@@ -502,8 +500,7 @@ class TestExtractSheetQaqcMeta30:
         ]
         try:
             extract_sheet_qaqc_meta(
-                wb, job_numbers, labs, ["TTTT"], ["Au"], ["ppm", "ppb"], self._make_cc, URIRef("http://test.com"),
-                "3.0")
+                wb, URIRef("http://example.com/dataset/x"), job_numbers, labs, ["TTTT"], ["Au"], ["ppm", "ppb"], self._make_cc, "3.0")
         except ConversionError as e:
             assert str(e) == "For each row in the QAQC_META worksheet, you must supply a ACCURACY value"
 
@@ -516,18 +513,16 @@ class TestExtractSheetQaqcGeochemistry30:
     def test_01_valid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-QAQC_GEOCHEMISTRY_01_valid.xlsx")
         g = extract_sheet_qaqc_geochemistry(
-            wb, ["JOB_27"], ["DEF123", "SSABCD"], ["TTTT"], ["Ag", "As", "Au"], self._make_cc,
-            URIRef("http://test.com"), "3.0")
+            wb, URIRef("http://example.com/dataset/x"), ["JOB_27"], ["DEF123", "SSABCD"], ["TTTT"], ["Ag", "As", "Au"], self._make_cc, "3.0")
 
-        assert (None, SOSA.observedProperty, URIRef("http://test.com/analyteCode/Au")) in g
-        assert (URIRef("http://test.com/sample/DEF123"), SOSA.isSampleOf, URIRef("http://test.com/sample/S54321")) in g
+        assert (None, SOSA.observedProperty, URIRef("http://example.com/dataset/x/analyteCode/Au")) in g
+        assert (URIRef("http://example.com/dataset/x/sample/DEF123"), SOSA.isSampleOf, URIRef("http://example.com/dataset/x/sample/S54321")) in g
 
     def test_02_invalid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-QAQC_GEOCHEMISTRY_02_invalid.xlsx")
         try:
             extract_sheet_qaqc_geochemistry(
-                wb, ["JOB_27"], ["DEF123", "SSABCD"], ["TTTT"], ["Ag", "As", "Au"], self._make_cc,
-                URIRef("http://test.com"), "3.0")
+                wb, URIRef("http://example.com/dataset/x"), ["JOB_27"], ["DEF123", "SSABCD"], ["TTTT"], ["Ag", "As", "Au"], self._make_cc, "3.0")
         except ConversionError as e:
             assert str(e) == "For each row in the QAQC_GEOCHEMISTRY worksheet, you must supply a STANDARD_ID value"
 
@@ -540,10 +535,9 @@ class TestExtractSheetSamplePxrf30:
     def test_01_valid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-SAMPLE_PXRF_01_valid.xlsx")
         g = extract_sheet_sample_pxrf(
-            wb, ["SS12346", "SS12347"], ["Ag", "As", "Au"], ["ppb", "g/t"],
-            self._make_cc, URIRef("http://test.com"), "3.0")
+            wb, URIRef("http://example.com/dataset/x"), ["SS12346", "SS12347"], ["Ag", "As", "Au"], ["ppb", "g/t"], self._make_cc, "3.0")
 
-        assert (None, SOSA.observedProperty, URIRef("http://test.com/analyteCode/Au")) in g
+        assert (None, SOSA.observedProperty, URIRef("http://example.com/dataset/x/analyteCode/Au")) in g
         for s in g.subjects(RDF.type, SOSA.Procedure):
             desc = g.value(subject=s, predicate=SDO.description)
             desc: Literal
@@ -553,8 +547,7 @@ class TestExtractSheetSamplePxrf30:
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-SAMPLE_PXRF_02_invalid.xlsx")
         try:
             extract_sheet_sample_pxrf(
-                wb, ["SS12346", "SS12347"], ["Ag", "As", "Au"], ["ppb", "g/t"],
-                self._make_cc, URIRef("http://test.com"), "3.0")
+                wb, URIRef("http://example.com/dataset/x"), ["SS12346", "SS12347"], ["Ag", "As", "Au"], ["ppb", "g/t"], self._make_cc, "3.0")
         except ConversionError as e:
             assert str(e) == "For each row in the SAMPLE_PXRF worksheet, you must supply a RESULT value"
 
@@ -562,14 +555,14 @@ class TestExtractSheetSamplePxrf30:
 class TestExtractSheetLithDictionary30:
     def test_01_valid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-LITH_DICTIONARY_01_valid.xlsx")
-        g, lith_ids = extract_sheet_lith_dictionary(wb, URIRef("http://test.com"), "3.0")
+        g, lith_ids = extract_sheet_lith_dictionary(wb, URIRef("http://example.com/dataset/x"), "3.0")
 
         assert len(lith_ids) == 180
 
     def test_02_invalid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-LITH_DICTIONARY_02_invalid.xlsx")
         try:
-            extract_sheet_lith_dictionary(wb, URIRef("http://test.com"), "3.0")
+            extract_sheet_lith_dictionary(wb, URIRef("http://example.com/dataset/x"), "3.0")
         except ConversionError as e:
             assert str(e) == "The value for GSQ_CODE_MATCH on row 24 of the worksheet LITH_DICTIONARY must not be null"
 
@@ -577,14 +570,14 @@ class TestExtractSheetLithDictionary30:
 class TestExtractSheetMinDictionary30:
     def test_01_valid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-MIN_DICTIONARY_01_valid.xlsx")
-        g, lith_ids = extract_sheet_min_dictionary(wb, URIRef("http://test.com"), "3.0")
+        g, lith_ids = extract_sheet_min_dictionary(wb, URIRef("http://example.com/dataset/x"), "3.0")
 
         assert len(lith_ids) == 69
 
     def test_02_invalid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-MIN_DICTIONARY_02_invalid.xlsx")
         try:
-            extract_sheet_min_dictionary(wb, URIRef("http://test.com"), "3.0")
+            extract_sheet_min_dictionary(wb, URIRef("http://example.com/dataset/x"), "3.0")
         except ConversionError as e:
             assert str(e) == "The value for GSQ_CODE_MATCH on row 24 of the worksheet MIN_DICTIONARY must not be null"
 
@@ -601,8 +594,7 @@ class TestExtractSheetDrillholeLithology30:
 
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-DRILLHOLE_LITHOLOGY_01_valid.xlsx")
         g = extract_sheet_drillhole_lithology(
-            wb, ["DD12346"], ["SL", "OSO"], ["Qz", "Sp", "OL", "Ka", "As"],
-            self._make_cc, URIRef("http://test.com"), "3.0")
+            wb, URIRef("http://example.com/dataset/x"), ["DD12346"], ["SL", "OSO"], ["Qz", "Sp", "OL", "Ka", "As"], self._make_cc, "3.0")
 
         no_obs = 0
         for _, _ in g.subject_objects(SOSA.hasMember):
@@ -618,8 +610,7 @@ class TestExtractSheetDrillholeLithology30:
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-DRILLHOLE_LITHOLOGY_02_invalid.xlsx")
 
         try:
-            extract_sheet_drillhole_lithology(wb, ["DD12346"], ["SL", "OSO"], ["Qz", "Sp", "OL", "Ka", "As"],
-                                              self._make_cc, URIRef("http://test.com"), "3.0")
+            extract_sheet_drillhole_lithology(wb, URIRef("http://example.com/dataset/x"), ["DD12346"], ["SL", "OSO"], ["Qz", "Sp", "OL", "Ka", "As"], self._make_cc, "3.0")
         except ConversionError as e:
             assert str(e) == "The value 1 for TO in row 10 of sheet DRILLHOLE_LITHOLOGY is not greater or equal " \
                              "to the FROM value as required"
@@ -632,8 +623,7 @@ class TestExtractSheetDrillholeLithology30:
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-DRILLHOLE_LITHOLOGY_03_invalid.xlsx")
 
         try:
-            extract_sheet_drillhole_lithology(wb, ["DD12346"], ["SL", "OSO"], ["Qz", "Sp", "OL", "Ka", "As"],
-                                              self._make_cc, URIRef("http://test.com"), "3.0")
+            extract_sheet_drillhole_lithology(wb, URIRef("http://example.com/dataset/x"), ["DD12346"], ["SL", "OSO"], ["Qz", "Sp", "OL", "Ka", "As"], self._make_cc, "3.0")
         except ConversionError as e:
             assert str(e) == "The value XXX for ALT_TYPE in row 10 on the DRILLHOLE_LITHOLOGY worksheet is not " \
                              "within the ALTERATION lookup list"
@@ -646,8 +636,7 @@ class TestExtractSheetDrillholeLithology30:
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-DRILLHOLE_LITHOLOGY_04_invalid.xlsx")
 
         try:
-            extract_sheet_drillhole_lithology(wb, ["DD12346"], ["SL"], ["Qz", "Sp", "OL", "Ka", "As"], self._make_cc,
-                                              URIRef("http://test.com"), "3.0")
+            extract_sheet_drillhole_lithology(wb, URIRef("http://example.com/dataset/x"), ["DD12346"], ["SL"], ["Qz", "Sp", "OL", "Ka", "As"], self._make_cc, "3.0")
         except ConversionError as e:
             assert str(e) == "The value OSO for ROCK_2 in row 10 of sheet DRILLHOLE_LITHOLOGY definedin the " \
                              "worksheet LITH_DICTIONARY in column B"
@@ -660,8 +649,7 @@ class TestExtractSheetDrillholeStructure30:
 
     def test_01_valid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-DRILLHOLE_STRUCTURE_01_valid.xlsx")
-        g = extract_sheet_drillhole_structure(
-            wb, ["DD12346", "DD12347"], self._make_cc, URIRef("http://test.com"), "3.0")
+        g = extract_sheet_drillhole_structure(wb, URIRef("http://example.com/dataset/x"), ["DD12346", "DD12347"], self._make_cc, "3.0")
 
         no_obs = 0
         for _, _ in g.subject_objects(SOSA.hasMember):
@@ -673,8 +661,7 @@ class TestExtractSheetDrillholeStructure30:
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-DRILLHOLE_STRUCTURE_02_invalid.xlsx")
 
         try:
-            extract_sheet_drillhole_structure(wb, ["DD12346", "DD12347"], self._make_cc, URIRef("http://test.com"),
-                                              "3.0")
+            extract_sheet_drillhole_structure(wb, URIRef("http://example.com/dataset/x"), ["DD12346", "DD12347"], self._make_cc, "3.0")
         except ConversionError as e:
             assert str(e) == "The value WHAT for STRUCTURE in row 11 on the DRILLHOLE_STRUCTURE worksheet is not " \
                              "within the STRUCTURAL_FEATURE lookup list"
@@ -683,7 +670,7 @@ class TestExtractSheetDrillholeStructure30:
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-DRILLHOLE_STRUCTURE_03_invalid.xlsx")
 
         try:
-            extract_sheet_drillhole_structure(wb, ["DD12346"], self._make_cc, URIRef("http://test.com"), "3.0")
+            extract_sheet_drillhole_structure(wb, URIRef("http://example.com/dataset/x"), ["DD12346"], self._make_cc, "3.0")
         except ConversionError as e:
             assert str(e) == "The value DD12348 for DRILLHOLE_ID in row 11 of sheet DRILLHOLE_STRUCTURE is not " \
                              "present on sheet DRILLHOLE_LOCATION in the DRILLHOLE_ID column, as required"
@@ -692,8 +679,7 @@ class TestExtractSheetDrillholeStructure30:
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-DRILLHOLE_STRUCTURE_04_invalid.xlsx")
 
         try:
-            extract_sheet_drillhole_structure(wb, ["DD12346", "DD12347", "DD12348"], self._make_cc,
-                                              URIRef("http://test.com"), "3.0")
+            extract_sheet_drillhole_structure(wb, URIRef("http://example.com/dataset/x"), ["DD12346", "DD12347", "DD12348"], self._make_cc, "3.0")
         except ConversionError as e:
             assert str(e) == "The value 500 for ALPHA_ANGLE in row 11 of sheet DRILLHOLE_STRUCTURE is not " \
                       "between 0 and 360 as required"
@@ -711,14 +697,13 @@ class TestExtractSheetSurfaceLithology30:
 
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-SURFACE_LITHOLOGY_01_valid.xlsx")
         g = extract_sheet_surface_lithology(
-            wb, ["SS12346"], ["TMO"], ["Qz", "Sp", "OL", "Ka", "As"],
-            self._make_cc, URIRef("http://test.com"), "3.0")
+            wb, URIRef("http://example.com/dataset/x"), ["SS12346"], ["TMO"], ["Qz", "Sp", "OL", "Ka", "As"], self._make_cc, "3.0")
 
         no_obs = 0
         for _, _ in g.subject_objects(SOSA.hasMember):
             no_obs += 1
 
-        assert no_obs == 10
+        assert no_obs == 5
 
     def test_02_invalid(self):
         @pytest.fixture(autouse=True)
@@ -728,8 +713,7 @@ class TestExtractSheetSurfaceLithology30:
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-SURFACE_LITHOLOGY_02_invalid.xlsx")
 
         try:
-            extract_sheet_surface_lithology(wb, ["SS12346"], ["TMO"], ["Qz", "Sp", "OL", "Ka", "As"],
-                                              self._make_cc, URIRef("http://test.com"), "3.0")
+            extract_sheet_surface_lithology(wb, URIRef("http://example.com/dataset/x"), ["SS12346"], ["TMO"], ["Qz", "Sp", "OL", "Ka", "As"], self._make_cc, "3.0")
         except ConversionError as e:
             assert str(e) == "For each row in the SURFACE_LITHOLOGY worksheet, you must supply a COLLECTION_DATE value"
 
@@ -741,19 +725,19 @@ class TestExtractSheetSurfaceStructure30:
 
     def test_01_valid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-SURFACE_STRUCTURE_01_valid.xlsx")
-        g = extract_sheet_surface_structure(wb, [], self._make_cc, URIRef("http://test.com"), "3.0")
+        g = extract_sheet_surface_structure(wb, URIRef("http://example.com/dataset/x"), [], self._make_cc, "3.0")
 
         no_obs = 0
         for _, _ in g.subject_objects(SOSA.hasMember):
             no_obs += 1
 
-        assert no_obs == 4
+        assert no_obs == 3
 
     def test_02_invalid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-SURFACE_STRUCTURE_02_invalid.xlsx")
 
         try:
-            extract_sheet_surface_structure(wb, [], self._make_cc, URIRef("http://test.com"),  "3.0")
+            extract_sheet_surface_structure(wb, URIRef("http://example.com/dataset/x"), [], self._make_cc, "3.0")
         except ConversionError as e:
             assert str(e) == "For each row in the SURFACE_STRUCTURE worksheet, you must supply a " \
                              "LOCATION_SURVEY_TYPE value"
@@ -766,10 +750,10 @@ class TestExtractSheetReservesResources30:
 
     def test_01_valid(self):
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-RESERVES_RESOURCES_01_valid.xlsx")
-        g = extract_sheet_reserves_resources(wb, self._make_cc, URIRef("http://test.com"), "3.0")
+        g = extract_sheet_reserves_resources(wb, URIRef("http://example.com/dataset/x"), self._make_cc, "3.0")
 
         assert (
-            URIRef("http://test.com/project/ABC-MINE-2"),
+            URIRef("http://example.com/dataset/x/project/ABC-MINE-2"),
             RDF.type,
             SDO.Project
         ) in g
@@ -778,7 +762,7 @@ class TestExtractSheetReservesResources30:
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "worksheets" / "GeochemXL-3.0-RESERVES_RESOURCES_02_invalid.xlsx")
 
         try:
-            extract_sheet_reserves_resources(wb, self._make_cc, URIRef("http://test.com"),  "3.0")
+            extract_sheet_reserves_resources(wb, URIRef("http://example.com/dataset/x"), self._make_cc, "3.0")
         except ConversionError as e:
             assert str(e) == "For each row in the SURFACE_STRUCTURE worksheet, you must supply a " \
                              "LOCATION_SURVEY_TYPE value"
@@ -793,6 +777,6 @@ class TestIntegration30:
         wb = load_workbook(TESTS_DIR / "data" / "3.0" / "GeochemXL-3.0-integration.xlsx")
         g, dataset_iri = workbook_to_rdf(wb, self._make_cc)
 
-        assert len(g) == 2027
+        assert len(g) == 2104
 
         assert type(dataset_iri) == URIRef

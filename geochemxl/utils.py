@@ -489,10 +489,11 @@ def make_observation(
         observation_collection_iri: Union[URIRef, BNode] = None,
         foi_iri: URIRef = None,
         procedure_iri: Union[URIRef, BNode] = None,
-        margin_of_error: Literal = None
+        margin_of_error: Literal = None,
+        observation_iri: Union[URIRef, BNode] = BNode
 ) -> (URIRef, Graph):
     g = Graph()
-    o = BNode()
+    o = observation_iri
 
     if observed_property is not None:
         g.add((o, RDF.type, SOSA.Observation))

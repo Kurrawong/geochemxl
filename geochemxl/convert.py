@@ -42,7 +42,7 @@ def extract_sheet_dataset_metadata(
     g.add((dataset_iri, SDO.description, Literal(description)))
     g.add((dataset_iri, SDO.dateCreated, Literal(date_created, datatype=XSD.date)))
     g.add((dataset_iri, SDO.dateModified, Literal(date_modified, datatype=XSD.date)))
-    qa = BNode()
+    qa = URIRef(dataset_iri + "/sheet/" + sheet_name + "/qualifiedAssociation")
     g.add((qa, RDF.type, PROV.Attribution))
     g.add((qa, PROV.agent, URIRef(author)))
     g.add((qa, PROV.hadRole, URIRef(
@@ -54,6 +54,7 @@ def extract_sheet_dataset_metadata(
 
 def validate_sheet_validation_dictionary(
         wb: openpyxl.Workbook,
+        dataset_iri: URIRef,
         combined_concepts: Graph,
         template_version: Optional[str] = None
 ):
@@ -62,7 +63,7 @@ def validate_sheet_validation_dictionary(
 
     # load user dict if not present
     if not combined_concepts.value(subject=URIRef("http://example.com/user-defined-vocab"), predicate=RDF.type):
-        combined_concepts += extract_sheet_user_dictionary(wb, combined_concepts)
+        combined_concepts += extract_sheet_user_dictionary(wb, dataset_iri, combined_concepts)
 
     sheet = wb["VALIDATION_DICTIONARY"]
 
@@ -98,12 +99,14 @@ def validate_sheet_validation_dictionary(
 
 def extract_sheet_user_dictionary(
         wb: openpyxl.Workbook,
+        dataset_iri: URIRef,
         template_version: Optional[str] = None,
 ) -> Graph:
     if template_version is None:
         template_version = check_template_version_supported(wb)
 
-    sheet = wb["USER_DICTIONARY"]
+    sheet_name = "USER_DICTIONARY"
+    sheet = wb[sheet_name]
 
     row = 9
     if sheet["C9"].value == "MEGA":
@@ -118,7 +121,7 @@ def extract_sheet_user_dictionary(
 
     while True:
         if sheet[f"B{row}"].value is not None:
-            bn = BNode()
+            bn = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row))
             g.add((bn, RDF.type, SKOS.Concept))
             if sheet[f"C{row}"].value is None:
                 raise ConversionError(
@@ -139,6 +142,7 @@ def extract_sheet_user_dictionary(
 
 def validate_sheet_uom(
         wb: openpyxl.Workbook,
+        dataset_iri: URIRef,
         combined_concepts: Graph,
         template_version: Optional[str] = None
 ):
@@ -147,10 +151,11 @@ def validate_sheet_uom(
     
     # load user UoM if not present
     if not combined_concepts.value(subject=URIRef("http://example.com/user-uom"), predicate=RDF.type):
-        user_uom_g, user_uom_notations = extract_sheet_user_uom(wb, combined_concepts)
+        user_uom_g, user_uom_notations = extract_sheet_user_uom(wb, dataset_iri, combined_concepts)
         combined_concepts += user_uom_g
 
-    sheet = wb["UNITS_OF_MEASURE"]
+    sheet_name = "UNITS_OF_MEASURE"
+    sheet = wb[sheet_name]
 
     col = 1
     while True:
@@ -183,13 +188,15 @@ def validate_sheet_uom(
 
 def extract_sheet_user_uom(
         wb: openpyxl.Workbook,
+        dataset_iri: URIRef,
         combined_concepts: Graph,
         template_version: Optional[str] = None
 ) -> Tuple[Graph, List]:
     if template_version is None:
         template_version = check_template_version_supported(wb)
 
-    sheet = wb["USER_UNITS_OF_MEASURE"]
+    sheet_name = "USER_UNITS_OF_MEASURE"
+    sheet = wb[sheet_name]
     
     row = 9
     if sheet["C9"].value == "kg/L":
@@ -205,7 +212,7 @@ def extract_sheet_user_uom(
 
     while True:
         if sheet[f"B{row}"].value is not None:
-            bn = BNode()
+            bn = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row))
             g.add((bn, RDF.type, SKOS.Concept))
             g.add((bn, SKOS.inScheme, cs))
             if sheet[f"B{row}"].value is None:
@@ -599,32 +606,32 @@ def extract_sheet_tenement(
 
             g.add((tenement_iri, SDO.additionalType, tenement_type_iri))
 
-            qa = BNode()
+            qa = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/TenementHolder")
             g.add((tenement_iri, PROV.qualifiedAttribution, qa))
             g.add((qa, PROV.agent, tenement_holder_lit))
             g.add((qa, PROV.hadRole, MININGROLES.TenementHolder))
 
             g.add((tenement_iri, TENEMENT.hasProject, project_name_lit))
 
-            qa2 = BNode()
+            qa2 = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/TenementOperator")
             g.add((tenement_iri, PROV.qualifiedAttribution, qa2))
             g.add((qa2, PROV.agent, tenement_operator_lit))
             g.add((qa2, PROV.hadRole, MININGROLES.TenementOperator))
 
-            ta = BNode()
+            ta = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/TenementArea")
             g.add((ta, RDF.type, GEO.Feature))
             g.add((ta, RDF.type, TENEMENT.TenementArea))
 
             g.add((tenement_iri, SDO.location, ta))
 
-            tg = BNode()
-            g.add((tg, RDF.type, GEO.Geometry))
-            g.add((tg, RDFS.comment, Literal(f"CRS is {geodetic_datum_iri}")))
-            g.add((tg, GEO.asWKT, Literal("POINT()", datatype=GEO.wktLiteral)))
+            geom = BNode()
+            g.add((geom, RDF.type, GEO.Geometry))
+            g.add((geom, RDFS.comment, Literal(f"CRS is {geodetic_datum_iri}")))
+            g.add((geom, GEO.asWKT, Literal("POINT()", datatype=GEO.wktLiteral)))
             for map_sheet in map_sheet_no_lit:
-                g.add((tg, SDO.identifier, map_sheet))
+                g.add((geom, SDO.identifier, map_sheet))
 
-            g.add((ta, GEO.hasGeometry, tg))
+            g.add((ta, GEO.hasGeometry, geom))
 
             if data["optional"]["remark"] is not None:
                 g.add((tenement_iri, RDFS.comment, remark_lit))
@@ -640,8 +647,8 @@ def extract_sheet_tenement(
 
 def extract_sheet_drillhole_location(
         wb: openpyxl.Workbook,
-        combined_concepts: Graph,
         dataset_iri: URIRef,
+        combined_concepts: Graph,
         template_version: Optional[str] = None
 ) -> Tuple[Graph, List[str]]:
     if template_version is None:
@@ -846,7 +853,7 @@ def extract_sheet_drillhole_location(
             if data["optional"]["current_class"] is not None:
                 g.add((drillhole_iri, BORE.hasPurpose, current_class_iri))
 
-            dt = BNode()
+            dt = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/DrillingTime")
             g.add((dt, RDF.type, BORE.DrillingTime))
             g.add((dt, PROV.startedAtTime, drill_start_date_lit))
             g.add((dt, PROV.endedAtTime, drill_end_date_lit))
@@ -855,7 +862,7 @@ def extract_sheet_drillhole_location(
             g.add((drillhole_iri, EX.locationSurveyType, location_survey_type_iri))
 
             if data["optional"]["survey_company"] is not None:
-                sc = BNode()
+                sc = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/SurveyCompany")
                 g.add((drillhole_iri, PROV.qualifiedAttribution, sc))
                 g.add((sc, PROV.agent, survey_company_lit))
                 g.add((sc, PROV.hadRole, MININGROLES.Surveyer))
@@ -864,7 +871,7 @@ def extract_sheet_drillhole_location(
 
             g.add((drillhole_iri, EX.preCollarDepth, pre_collar_depth_lit))
 
-            dc = BNode()
+            dc = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/Driller")
             g.add((drillhole_iri, PROV.qualifiedAttribution, dc))
             g.add((dc, PROV.agent, drill_contractor_lit))
             g.add((dc, PROV.hadRole, MININGROLES.Driller))
@@ -885,9 +892,9 @@ def extract_sheet_drillhole_location(
 # dependent on extract_sheet_drillhole_location
 def extract_sheet_drillhole_survey(
         wb: openpyxl.Workbook,
+        dataset_iri: URIRef,
         combined_concepts: Graph,
         drillhole_ids: List[str],
-        dataset_iri: URIRef,
         template_version: Optional[str] = None
 ) -> Graph:
     if template_version is None:
@@ -1012,32 +1019,32 @@ def extract_sheet_drillhole_survey(
             g.add((dataset_iri, SDO.hasPart, drillhole_iri))
 
             g.add((drillhole_iri, RDF.type, BORE.Bore))
-            s = BNode()
+            s = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/Survey")
             g.add((drillhole_iri, BORE.hadSurvey, s))
             g.add((s, RDF.type, BORE.Survey))  # an ObservationCollection
             g.add((s, SOSA.madeBySensor, survey_instrument_iri))
             if data["optional"]["survey_company"] is not None:
-                sc = BNode()
+                sc = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/SurveyCompany")
                 g.add((s, PROV.qualifiedAttribution, sc))
                 g.add((sc, PROV.agent, survey_company_lit))
                 g.add((sc, PROV.hadRole, MININGROLES.Surveyer))
             if data["optional"]["survey_date"] is not None:
-                t = BNode()
+                t = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/SurveyDate")
                 g.add((t, RDF.type, TIME.Instant))
                 g.add((t, TIME.inXSDDateTime, survey_date_lit))
                 g.add((s, TIME.hasTime, t))
 
-            o, g2 = make_observation(BORE.hasTotalDepth, survey_depth_lit, None, UNITS.M, None, None, drillhole_iri, EX.HumanObservation)
+            o, g2 = make_observation(BORE.hasTotalDepth, survey_depth_lit, None, UNITS.M, None, None, drillhole_iri, EX.HumanObservation, observation_iri=URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/TotalDepth"))
             g += g2
 
-            o, g2 = make_observation(BORE.hasAzimuth, azimuth_lit, None, UNITS.DEG, None, None, drillhole_iri, EX.HumanObservation, azimuth_accuracy_lit)
+            o, g2 = make_observation(BORE.hasAzimuth, azimuth_lit, None, UNITS.DEG, None, None, drillhole_iri, EX.HumanObservation, azimuth_accuracy_lit, observation_iri=URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/Azimuth"))
             g += g2
 
-            o, g2 = make_observation(BORE.hasDip, dip_lit, None, UNITS.DEG, None, None, drillhole_iri, EX.HumanObservation, inclination_accuracy_lit)
+            o, g2 = make_observation(BORE.hasDip, dip_lit, None, UNITS.DEG, None, None, drillhole_iri, EX.HumanObservation, inclination_accuracy_lit, observation_iri=URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/Dip"))
             g += g2
 
             if magnetic_field is not None:
-                o, g2 = make_observation(EX.hasMagneticFieldStrength, magnetic_field_lit, None, UNITS.NanoT, None, None, drillhole_iri, EX.HumanObservation, inclination_accuracy_lit)
+                o, g2 = make_observation(EX.hasMagneticFieldStrength, magnetic_field_lit, None, UNITS.NanoT, None, None, drillhole_iri, EX.HumanObservation, inclination_accuracy_lit, observation_iri=URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/MagField"))
                 g += g2
 
             if data["optional"]["remark"] is not None:
@@ -1056,9 +1063,9 @@ def extract_sheet_drillhole_survey(
 # dependent on extract_sheet_drillhole_location
 def extract_sheet_drillhole_sample(
         wb: openpyxl.Workbook,
+        dataset_iri: URIRef,
         combined_concepts: Graph,
         drillhole_ids: List[str],
-        dataset_iri: URIRef,
         template_version: Optional[str] = None
 ) -> Graph:
     if template_version is None:
@@ -1211,10 +1218,10 @@ def extract_sheet_drillhole_sample(
                 g.add((sample_iri, SOSA.madeBySensor, instrument_type_lit))
 
             if specific_gravity is not None:
-                o, g2 = make_observation(EX.SpecificGravity, specific_gravity_lit, None, UNITS.UNITLESS, None, None, sample_iri, EX.HumanObservation)
+                o, g2 = make_observation(EX.SpecificGravity, specific_gravity_lit, None, UNITS.UNITLESS, None, None, sample_iri, EX.HumanObservation, observation_iri=URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/SpecGrav"))
                 g += g2
             if magnetic_susceptibility is not None:
-                o, g2 = make_observation(QKINDS.MagneticSusceptability, magnetic_susceptibility_lit, None, UNITS.UNITLESS, None, None, sample_iri, EX.HumanObservation)
+                o, g2 = make_observation(QKINDS.MagneticSusceptability, magnetic_susceptibility_lit, None, UNITS.UNITLESS, None, None, sample_iri, EX.HumanObservation, observation_iri=URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/MagSep"))
                 g += g2
             if remark is not None:
                 g.add((sample_iri, RDFS.comment, remark_lit))
@@ -1233,8 +1240,8 @@ def extract_sheet_drillhole_sample(
 
 def extract_sheet_surface_sample(
         wb: openpyxl.Workbook,
-        combined_concepts: Graph,
         dataset_iri: URIRef,
+        combined_concepts: Graph,
         template_version: Optional[str] = None
 ) -> Graph:
     if template_version is None:
@@ -1435,7 +1442,7 @@ def extract_sheet_surface_sample(
             g.add((sample_iri, SDO.color, soil_colour_iri))
             g.add((sample_iri, EX.ph, soil_colour_iri))
 
-            o, g2 = make_observation(QKINDS.PH, soil_ph_lit, None, UNITS.UNITLESS, None, None, sample_iri, EX.HumanObservation)
+            o, g2 = make_observation(QKINDS.PH, soil_ph_lit, None, UNITS.UNITLESS, None, None, sample_iri, EX.HumanObservation, observation_iri=URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/PH"))
             g += g2
 
             geom = BNode()
@@ -1451,10 +1458,10 @@ def extract_sheet_surface_sample(
                 g.add((sample_iri, SOSA.madeBySensor, instrument_type_lit))
 
             if specific_gravity is not None:
-                o, g2 = make_observation(EX.SpecificGravity, specific_gravity_lit, None, UNITS.UNITLESS, None, None, sample_iri, EX.HumanObservation)
+                o, g2 = make_observation(EX.SpecificGravity, specific_gravity_lit, None, UNITS.UNITLESS, None, None, sample_iri, EX.HumanObservation, observation_iri=URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/SpecGrav"))
                 g += g2
             if magnetic_susceptibility is not None:
-                o, g2 = make_observation(QKINDS.MagneticSusceptability, magnetic_susceptibility_lit, None, UNITS.UNITLESS, None, None, sample_iri, EX.HumanObservation)
+                o, g2 = make_observation(QKINDS.MagneticSusceptability, magnetic_susceptibility_lit, None, UNITS.UNITLESS, None, None, sample_iri, EX.HumanObservation, observation_iri=URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/MagSep"))
                 g += g2
             if remark is not None:
                 g.add((sample_iri, RDFS.comment, remark_lit))
@@ -1473,11 +1480,11 @@ def extract_sheet_surface_sample(
 
 def extract_sheet_sample_preparation(
         wb: openpyxl.Workbook,
+        dataset_iri: URIRef,
         laboratory_names_and_ids: Dict,
         user_sample_prep_code_ids: List[str],
         user_assay_code_ids: List[str],
         sample_ids: List[str],
-        dataset_iri: URIRef,
         template_version: Optional[str] = None
 ) -> Tuple[Graph, List]:
     if template_version is None:
@@ -1556,7 +1563,7 @@ def extract_sheet_sample_preparation(
                 g.add((job_number_iri, RDF.type, SOSAX.ObservationCollection))
                 g.add((job_number_iri, SOSA.hasFeatureOfInterest, sample_iri))
 
-                qa = BNode()
+                qa = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/SampleAnalyser")
                 g.add((job_number_iri, PROV.qualifiedAttribution, qa))
                 g.add((qa, PROV.agent, laboratory_iri))
                 g.add((qa, PROV.hadRole, MININGROLES.SampleAnalyser))
@@ -1566,7 +1573,7 @@ def extract_sheet_sample_preparation(
                 # for sample_prep_codes_iri in sample_prep_codes_iris:
                 #     g.add(obs, SOSA.usedProcedure, sample_prep_codes_iri)
 
-                pcs = BNode()
+                pcs = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/SamplePrepCodes")
                 Seq(g, pcs, sample_prep_codes_iris)
                 g.add((pcs, RDFS.label, Literal("Sample Preparation codes")))
                 g.add((job_number_iri, SOSA.usedProcedure, pcs))
@@ -1586,13 +1593,13 @@ def extract_sheet_sample_preparation(
 
 def extract_sheet_geochemistry_meta(
         wb: openpyxl.Workbook,
+        dataset_iri: URIRef,
         job_numbers: List[str],
         laboratory_names_and_ids: Dict,
         user_assay_code_ids: List[str],
         analyte_ids: List[str],
         unit_of_measure_ids: List[str],
         combined_concepts: Graph,
-        dataset_iri: URIRef,
         template_version: Optional[str] = None
 ) -> Graph:
     if template_version is None:
@@ -1669,7 +1676,7 @@ def extract_sheet_geochemistry_meta(
                 job_number_iri = URIRef(Namespace(dataset_iri + "/jobNumber/") + job_number)
                 laboratory_iri = laboratory_names_and_ids[laboratory_name]
                 assay_code_iri = URIRef(Namespace(dataset_iri + "/assayCode/") + assay_code)
-                analyte_code_iri = URIRef(Namespace(dataset_iri + "/analyteCode_e/") + analyte_code)
+                analyte_code_iri = URIRef(Namespace(dataset_iri + "/analyteCode/") + analyte_code)
                 unit_of_measure_iri = make_rdflib_type(unit_of_measure, "Concept", combined_concepts)
                 lower_detection_limit_lit = make_rdflib_type(data["required"]["lower_detection_limit"], "Number")
                 accuracy_lit = make_rdflib_type(data["required"]["accuracy"], "Number")
@@ -1681,22 +1688,22 @@ def extract_sheet_geochemistry_meta(
                 g.add((dataset_iri, SDO.hasPart, job_number_iri))
                 g.add((job_number_iri, RDF.type, SOSAX.ObservationCollection))
 
-                qa = BNode()
+                qa = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/SampleAnalyser")
                 g.add((job_number_iri, PROV.qualifiedAttribution, qa))
                 g.add((qa, PROV.agent, laboratory_iri))
                 g.add((qa, PROV.hadRole, MININGROLES.SampleAnalyser))
 
                 g.add((job_number_iri, SOSA.observedProperty, analyte_code_iri))
 
-                sens = BNode()
+                sens = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/Sensor")
                 g.add((sens, RDF.type, SOSA.Sensor))
                 g.add((job_number_iri, SOSA.madeBySensor, sens))
 
                 g.add((sens, SSN.implements, assay_code_iri))
 
-                params = BNode()
+                params = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/Parameters")
                 g.add((params, SDO.unitCode, unit_of_measure_iri))
-                interval = BNode()
+                interval = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/NumericalInterval")
                 g.add((interval, RDF.type, EX.NumericalInterval))
                 g.add((interval, EX.lowerBound, lower_detection_limit_lit))
                 if data["optional"].get("upper_detection_limit") is not None:
@@ -1718,11 +1725,11 @@ def extract_sheet_geochemistry_meta(
 
 def extract_sheet_sample_geochemistry(
         wb: openpyxl.Workbook,
+        dataset_iri: URIRef,
         job_numbers: List[str],
         sample_ids: List[str],
         user_assay_code_ids: List[str],
         analyte_ids: List[str],
-        dataset_iri: URIRef,
         template_version: Optional[str] = None
 ) -> Graph:
     if template_version is None:
@@ -1789,14 +1796,14 @@ def extract_sheet_sample_geochemistry(
                 job_number_iri = make_rdflib_type(job_number, "URIRef", None, Namespace(dataset_iri + "/jobNumber/"))
                 sample_iri = make_rdflib_type(sample_id, "URIRef", None, Namespace(dataset_iri + "/sample/"))
                 assay_code_iri = make_rdflib_type(assay_code, "URIRef", None, Namespace(dataset_iri + "/assayCode/"))
-                analyte_code_iri = make_rdflib_type(analyte_code, "URIRef", None, Namespace(dataset_iri + "/analyteCode_a/"))
+                analyte_code_iri = make_rdflib_type(analyte_code, "URIRef", None, Namespace(dataset_iri + "/analyteCode/"))
                 result_lit = make_rdflib_type(result, "Number")
 
                 # make the graph
                 g.add((dataset_iri, SDO.hasPart, job_number_iri))
                 g.add((job_number_iri, RDF.type, SOSAX.ObservationCollection))
 
-                o, g2 = make_observation(analyte_code_iri, result_lit, None, UNITS.UNITLESS, None, job_number_iri, sample_iri, assay_code_iri)
+                o, g2 = make_observation(analyte_code_iri, result_lit, None, UNITS.UNITLESS, None, job_number_iri, sample_iri, assay_code_iri, observation_iri=URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/Observation"))
                 g += g2
 
                 row += 1
@@ -1810,13 +1817,13 @@ def extract_sheet_sample_geochemistry(
 
 def extract_sheet_qaqc_meta(
         wb: openpyxl.Workbook,
+        dataset_iri: URIRef,
         job_numbers: List[str],
         laboratory_names_and_ids: Dict,
         user_assay_code_ids: List[str],
         analyte_ids: List[str],
         unit_of_measure_ids: List[str],
         combined_concepts: Graph,
-        dataset_iri: URIRef,
         template_version: Optional[str] = None
 ) -> Graph:
     if template_version is None:
@@ -1893,7 +1900,7 @@ def extract_sheet_qaqc_meta(
                 job_number_iri = URIRef(Namespace(dataset_iri + "/jobNumber/") + job_number)
                 laboratory_iri = laboratory_names_and_ids[laboratory_name]
                 assay_code_iri = URIRef(Namespace(dataset_iri + "/assayCode/") + assay_code)
-                analyte_code_iri = URIRef(Namespace(dataset_iri + "/analyteCode_b/") + analyte_code)
+                analyte_code_iri = URIRef(Namespace(dataset_iri + "/analyteCode/") + analyte_code)
                 unit_of_measure_iri = make_rdflib_type(unit_of_measure, "Concept", combined_concepts)
                 lower_detection_limit_lit = make_rdflib_type(data["required"]["lower_detection_limit"], "Number")
                 accuracy_lit = make_rdflib_type(data["required"]["accuracy"], "Number")
@@ -1905,22 +1912,22 @@ def extract_sheet_qaqc_meta(
                 g.add((dataset_iri, SDO.hasPart, job_number_iri))
                 g.add((job_number_iri, RDF.type, SOSAX.ObservationCollection))
 
-                qa = BNode()
+                qa = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/SampleAnalyser")
                 g.add((job_number_iri, PROV.qualifiedAttribution, qa))
                 g.add((qa, PROV.agent, laboratory_iri))
                 g.add((qa, PROV.hadRole, MININGROLES.SampleAnalyser))
 
                 g.add((job_number_iri, SOSA.observedProperty, analyte_code_iri))
 
-                sens = BNode()
+                sens = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/Sensor")
                 g.add((sens, RDF.type, SOSA.Sensor))
                 g.add((job_number_iri, SOSA.madeBySensor, sens))
 
                 g.add((sens, SSN.implements, assay_code_iri))
 
-                params = BNode()
+                params = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/Parameters")
                 g.add((params, SDO.unitCode, unit_of_measure_iri))
-                interval = BNode()
+                interval = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/NumericalInterval")
                 g.add((interval, RDF.type, EX.NumericalInterval))
                 g.add((interval, EX.lowerBound, lower_detection_limit_lit))
                 if data["optional"].get("upper_detection_limit") is not None:
@@ -1942,12 +1949,12 @@ def extract_sheet_qaqc_meta(
 
 def extract_sheet_qaqc_geochemistry(
         wb: openpyxl.Workbook,
+        dataset_iri: URIRef,
         job_numbers: List[str],
         sample_ids: List[str],
         user_assay_code_ids: List[str],
         analyte_ids: List[str],
         combined_concepts: Graph,
-        dataset_iri: URIRef,
         template_version: Optional[str] = None
 ) -> Graph:
     if template_version is None:
@@ -2031,7 +2038,7 @@ def extract_sheet_qaqc_geochemistry(
                 job_number_iri = make_rdflib_type(job_number, "URIRef", None, Namespace(dataset_iri + "/jobNumber/"))
                 sample_iri = make_rdflib_type(sample_id, "URIRef", None, Namespace(dataset_iri + "/sample/"))
                 assay_code_iri = make_rdflib_type(assay_code, "URIRef", None, Namespace(dataset_iri + "/assayCode/"))
-                analyte_code_iri = make_rdflib_type(analyte_code, "URIRef", None, Namespace(dataset_iri + "/analyteCode_c/"))
+                analyte_code_iri = make_rdflib_type(analyte_code, "URIRef", None, Namespace(dataset_iri + "/analyteCode/"))
                 result_lit = make_rdflib_type(result, "Number")
                 orig_sample_iri = make_rdflib_type(orig_sample_id, "URIRef", None, Namespace(dataset_iri + "/sample/"))
                 qaqc_type_iri = make_rdflib_type(qaqc_type, "Concept", combined_concepts)
@@ -2041,17 +2048,17 @@ def extract_sheet_qaqc_geochemistry(
                 # make the graph
                 g.add((dataset_iri, SDO.hasPart, job_number_iri))
 
-                obs = BNode()
+                obs = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/Observation")
                 g.add((obs, RDF.type, SOSA.Observation))
                 g.add((job_number_iri, RDF.type, SOSAX.ObservationCollection))
                 g.add((job_number_iri, SOSAX.hasMember, obs))
 
-                o, g2 = make_observation(analyte_code_iri, result_lit, None, UNITS.UNITLESS, None, job_number_iri, sample_iri, assay_code_iri)
+                o, g2 = make_observation(analyte_code_iri, result_lit, None, UNITS.UNITLESS, None, job_number_iri, sample_iri, assay_code_iri, observation_iri=URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/Observation"))
                 g += g2
 
                 g.add((sample_iri, SOSA.isSampleOf, orig_sample_iri))
                 g.add((sample_iri, SDO.additionalType, qaqc_type_iri))
-                p = BNode()
+                p = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/Procedure")
                 g.add((p, RDF.type, SOSA.Procedure))
                 g.add((p, SDO.identifier, standard_id_lit))
                 g.add((p, SDO.author, standard_provider_lit))
@@ -2068,11 +2075,11 @@ def extract_sheet_qaqc_geochemistry(
 
 def extract_sheet_sample_pxrf(
         wb: openpyxl.Workbook,
+        dataset_iri: URIRef,
         sample_ids: List[str],
         analyte_ids: List[str],
         unit_of_measure_ids: List[str],
         combined_concepts: Graph,
-        dataset_iri: URIRef,
         template_version: Optional[str] = None
 ) -> Graph:
     if template_version is None:
@@ -2083,7 +2090,7 @@ def extract_sheet_sample_pxrf(
 
     row = 9
     g = Graph()
-    obs_col_bn = BNode()
+    obs_col_bn = URIRef(dataset_iri + "/sheet/" + sheet_name + "/ObservationCollection")
     g.add((obs_col_bn, RDF.type, SOSAX.ObservationCollection))
     g.add((dataset_iri, SDO.hasPart, obs_col_bn))
 
@@ -2162,19 +2169,19 @@ def extract_sheet_sample_pxrf(
                     "XRF_INSTRUMENT_TYPE": xrf_instrument_type
                 }
                 procedure_lit = Literal(json.dumps(json_val), datatype=RDF.JSON)
-                analyte_code_iri = make_rdflib_type(analyte_code, "URIRef", None, Namespace(dataset_iri + "/analyteCode_d/"))
+                analyte_code_iri = make_rdflib_type(analyte_code, "URIRef", None, Namespace(dataset_iri + "/analyteCode/"))
                 uom_iri = make_rdflib_type(unit_of_measure, "Concept", combined_concepts)
                 result_lit = make_rdflib_type(result, "Number")
 
                 # make the graph
                 g.add((dataset_iri, SDO.hasPart, sample_iri))
 
-                procedure_bn = BNode()
+                procedure_bn = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/Procedure")
                 g.add((procedure_bn, RDF.type, SOSA.Procedure))
                 g.add((procedure_bn, SDO.name, Literal("XRF Analysis")))
                 g.add((procedure_bn, SDO.description, procedure_lit))
 
-                o, g2 = make_observation(analyte_code_iri, result_lit, None, uom_iri, None, obs_col_bn, sample_iri, procedure_bn)
+                o, g2 = make_observation(analyte_code_iri, result_lit, None, uom_iri, None, obs_col_bn, sample_iri, procedure_bn, observation_iri=URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/Observation"))
                 g += g2
 
                 row += 1
@@ -2310,11 +2317,11 @@ def extract_sheet_min_dictionary(
 
 def extract_sheet_drillhole_lithology(
         wb: openpyxl.Workbook,
+        dataset_iri: URIRef,
         drillhole_ids: List[str],
         lith_code_ids: List[str],
         min_code_ids: List[str],
         combined_concepts: Graph,
-        dataset_iri: URIRef,
         template_version: Optional[str] = None
 ) -> Graph:
     if template_version is None:
@@ -2693,21 +2700,21 @@ def extract_sheet_drillhole_lithology(
                 g.add((dataset_iri, SDO.hasPart, drillhole_iri))
                 g.add((drillhole_iri, RDF.type, BORE.Bore))
 
-                bh = BNode()
+                bh = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/Borehole")
                 g.add((bh, RDF.type, BORE.Borehole))
                 g.add((drillhole_iri, SDO.hasPart, bh))
 
-                bi = BNode()
+                bi = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/BoreholeInterval")
                 g.add((bi, RDF.type, BORE.BoreholeInterval))
                 g.add((bi, SDO.depth, depth_from_lit))
                 g.add((bi, SDO.depth, depth_to_lit))
                 g.add((bh, SDO.hasPart, bi))
 
-                s = BNode()
+                s = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/Sample")
                 g.add((s, RDF.type, SOSA.Sample))
                 g.add((s, SOSA.isSampleOf, bi))
 
-                oc = BNode()
+                oc = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/ObservationCollection")
                 g.add((oc, RDF.type, SOSAX.ObservationCollection))
                 g.add((oc, SOSA.hasFeatureOfInterest, drillhole_iri))
                 g.add((oc, SOSA.usedProcedure, EX.HumanObservation))
@@ -2736,7 +2743,7 @@ def extract_sheet_drillhole_lithology(
 
                 for n, op, v, u, d in material_observations:
                     if v is not None:
-                        o, g2 = make_observation(op, v, n, u, d, oc, drillhole_iri, EX.HumanObservation)
+                        o, g2 = make_observation(op, v, n, u, d, oc, drillhole_iri, EX.HumanObservation, observation_iri=URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/" + str(n).replace(" ", "")))
                         if g2 is not None:
                             g += g2
 
@@ -2754,9 +2761,9 @@ def extract_sheet_drillhole_lithology(
 
 def extract_sheet_drillhole_structure(
         wb: openpyxl.Workbook,
+        dataset_iri: URIRef,
         drillhole_ids: List[str],
         combined_concepts: Graph,
-        dataset_iri: URIRef,
         template_version: Optional[str] = None
 ) -> Graph:
     if template_version is None:
@@ -2863,7 +2870,7 @@ def extract_sheet_drillhole_structure(
                 
             # make the graph
             g.add((dataset_iri, SDO.hasPart, drillhole_iri))
-            oc = BNode()
+            oc = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/ObservationCollection")
             g.add((oc, RDF.type, SOSAX.ObservationCollection))
             g.add((oc, SOSA.hasFeatureOfInterest, drillhole_iri))
             g.add((drillhole_iri, SOSA.isFeatureOfInterestOf, oc))
@@ -2881,7 +2888,7 @@ def extract_sheet_drillhole_structure(
 
             for n, op, v, u, d in material_observations:
                 if v is not None:
-                    o, g2 = make_observation(op, v, n, u, d, oc, drillhole_iri, EX.HumanObservation)
+                    o, g2 = make_observation(op, v, n, u, d, oc, drillhole_iri, EX.HumanObservation, observation_iri=URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/" + str(n).replace(" ", "")))
                     if g2 is not None:
                         g += g2
 
@@ -2900,11 +2907,11 @@ def extract_sheet_drillhole_structure(
 
 def extract_sheet_surface_lithology(
         wb: openpyxl.Workbook,
+        dataset_iri: URIRef,
         sample_ids: List[str],
         lith_code_ids: List[str],
         min_code_ids: List[str],
         combined_concepts: Graph,
-        dataset_iri: URIRef,
         template_version: Optional[str] = None
 ) -> Graph:
     if template_version is None:
@@ -3384,7 +3391,7 @@ def extract_sheet_surface_lithology(
                 g.add((s, EX.locationSurveyType, location_survey_type_iri))
                 g.add((s, PROV.generatedAtTime, collection_date_lit))
 
-                oc = BNode()
+                oc = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row))
                 g.add((oc, RDF.type, SOSAX.ObservationCollection))
                 g.add((oc, SOSA.hasFeatureOfInterest, s))
 
@@ -3411,7 +3418,7 @@ def extract_sheet_surface_lithology(
 
                 for n, op, v, u, d in material_observations:
                     if v is not None:
-                        o, g2 = make_observation(op, v, n, u, d, oc, s, EX.HumanObservation)
+                        o, g2 = make_observation(op, v, n, u, d, oc, s, EX.HumanObservation, observation_iri=URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/" + str(n).replace(" ", "")))
                         if g2 is not None:
                             g += g2
 
@@ -3429,9 +3436,9 @@ def extract_sheet_surface_lithology(
 
 def extract_sheet_surface_structure(
     wb: openpyxl.Workbook,
+    dataset_iri: URIRef,
     sample_ids: List[str],
     combined_concepts: Graph,
-    dataset_iri: URIRef,
     template_version: Optional[str] = None
 ) -> Graph:
     if template_version is None:
@@ -3459,7 +3466,7 @@ def extract_sheet_surface_structure(
                         "location_survey_type": sheet[f"G{row}"].value,
                         "collection_date": sheet[f"H{row}"].value,
 
-                        "structure_type": sheet[f"I{row}"].value,
+                        "structure": sheet[f"I{row}"].value,
 
                     },
                     "optional": {
@@ -3534,7 +3541,7 @@ def extract_sheet_surface_structure(
                             f'The value {collection_date} for COLLECTION_DATE in row {row} of '
                             f'sheet {sheet_name} is not a date as required')
 
-                structure = data["optional"].get("structure")
+                structure = data["required"].get("structure")
                 if structure is not None:
                     validate_code(
                         structure,
@@ -3595,7 +3602,7 @@ def extract_sheet_surface_structure(
                 g.add((s, EX.locationSurveyType, location_survey_type_iri))
                 g.add((s, PROV.generatedAtTime, collection_date_lit))
 
-                oc = BNode()
+                oc = URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row))
                 g.add((oc, RDF.type, SOSAX.ObservationCollection))
                 g.add((oc, SOSA.hasFeatureOfInterest, s))
 
@@ -3609,7 +3616,7 @@ def extract_sheet_surface_structure(
 
                 for n, op, v, u, d in material_observations:
                     if v is not None:
-                        o, g2 = make_observation(op, v, n, u, d, oc, s, EX.HumanObservation)
+                        o, g2 = make_observation(op, v, n, u, d, oc, s, EX.HumanObservation, observation_iri=URIRef(dataset_iri + "/sheet/" + sheet_name + "/row/" + str(row) + "/" + str(n).replace(" ", "")))
                         if g2 is not None:
                             g += g2
 
@@ -3627,8 +3634,8 @@ def extract_sheet_surface_structure(
 
 def extract_sheet_reserves_resources(
     wb: openpyxl.Workbook,
-    combined_concepts: Graph,
     dataset_iri: URIRef,
+    combined_concepts: Graph,
     template_version: Optional[str] = None
 ) -> Graph:
     if template_version is None:
@@ -3818,18 +3825,18 @@ def workbook_to_rdf(
     grf, dataset_iri = extract_sheet_dataset_metadata(wb, cc)
     grf: Graph
 
-    validate_sheet_validation_dictionary(wb, cc)
-    grf += extract_sheet_user_dictionary(wb, template_version)
-    validate_sheet_uom(wb, cc)
-    g, uuo_notations = extract_sheet_user_uom(wb, cc)
+    validate_sheet_validation_dictionary(wb, dataset_iri, cc)
+    grf += extract_sheet_user_dictionary(wb, dataset_iri, template_version)
+    validate_sheet_uom(wb, dataset_iri, cc)
+    g, uuo_notations = extract_sheet_user_uom(wb, dataset_iri, cc)
     grf += g
     grf += extract_sheet_tenement(wb, cc, dataset_iri, template_version)
-    g, drillhole_ids = extract_sheet_drillhole_location(wb, cc, dataset_iri, template_version)
+    g, drillhole_ids = extract_sheet_drillhole_location(wb, dataset_iri, cc, template_version)
     grf += g
-    grf += extract_sheet_drillhole_survey(wb, cc, drillhole_ids, dataset_iri, template_version)
-    g, sample_ids = extract_sheet_drillhole_sample(wb, cc, drillhole_ids, dataset_iri, template_version)
+    grf += extract_sheet_drillhole_survey(wb, dataset_iri, cc, drillhole_ids, template_version)
+    g, sample_ids = extract_sheet_drillhole_sample(wb, dataset_iri, cc, drillhole_ids, template_version)
     grf += g
-    g, sample_ids2 = extract_sheet_surface_sample(wb, cc, dataset_iri, template_version)
+    g, sample_ids2 = extract_sheet_surface_sample(wb, dataset_iri, cc, template_version)
     grf += g
     sample_ids: []
     sample_ids += sample_ids2
@@ -3841,30 +3848,30 @@ def workbook_to_rdf(
     grf += g
     g, ans = extract_sheet_user_analytes(wb, dataset_iri, template_version)
     grf += g
-    g, job_numbers = extract_sheet_sample_preparation(wb, laboratories_dict, uspcs, assay_codes, sample_ids, dataset_iri, template_version)
+    g, job_numbers = extract_sheet_sample_preparation(wb, dataset_iri, laboratories_dict, uspcs, assay_codes, sample_ids, template_version)
     grf += g
     uoms_concentration_notations = []
     for mem in cc.objects(URIRef("https://linked.data.gov.au/def/gsq-geochem/uom/concentration"), SKOS.member):
         uoms_concentration_notations.append(str(cc.value(subject=mem, predicate=SKOS.notation)))
-    grf += extract_sheet_geochemistry_meta(wb, job_numbers, laboratories_dict, assay_codes, ans, uoms_concentration_notations, cc, dataset_iri, template_version)
-    grf += extract_sheet_sample_geochemistry(wb, job_numbers, sample_ids, assay_codes, ans, dataset_iri, template_version)
+    grf += extract_sheet_geochemistry_meta(wb, dataset_iri, job_numbers, laboratories_dict, assay_codes, ans, uoms_concentration_notations, cc, template_version)
+    grf += extract_sheet_sample_geochemistry(wb, dataset_iri, job_numbers, sample_ids, assay_codes, ans, template_version)
 
-    grf += extract_sheet_qaqc_meta(wb, job_numbers, laboratories_dict, assay_codes, ans, uoms_concentration_notations, cc, dataset_iri, template_version)
-    grf += extract_sheet_qaqc_geochemistry(wb, job_numbers, sample_ids, assay_codes, ans, cc, dataset_iri, template_version)
+    grf += extract_sheet_qaqc_meta(wb, dataset_iri, job_numbers, laboratories_dict, assay_codes, ans, uoms_concentration_notations, cc, template_version)
+    grf += extract_sheet_qaqc_geochemistry(wb, dataset_iri, job_numbers, sample_ids, assay_codes, ans, cc, template_version)
 
-    grf += extract_sheet_sample_pxrf(wb, sample_ids, ans, uoms_concentration_notations, cc, dataset_iri, template_version)
+    grf += extract_sheet_sample_pxrf(wb, dataset_iri, sample_ids, ans, uoms_concentration_notations, cc, template_version)
 
-    g, lith_ids = extract_sheet_lith_dictionary(wb, URIRef("http://test.com"), "3.0")
+    g, lith_ids = extract_sheet_lith_dictionary(wb, dataset_iri, "3.0")
     grf += g
-    g, min_ids = extract_sheet_min_dictionary(wb, URIRef("http://test.com"), "3.0")
+    g, min_ids = extract_sheet_min_dictionary(wb, dataset_iri, "3.0")
     grf += g
-    grf += extract_sheet_drillhole_lithology(wb, drillhole_ids, lith_ids, min_ids, cc, dataset_iri, template_version)
-    grf += extract_sheet_drillhole_structure(wb, drillhole_ids, cc, dataset_iri, template_version)
+    grf += extract_sheet_drillhole_lithology(wb, dataset_iri, drillhole_ids, lith_ids, min_ids, cc, template_version)
+    grf += extract_sheet_drillhole_structure(wb, dataset_iri, drillhole_ids, cc, template_version)
 
-    grf += extract_sheet_surface_lithology(wb, sample_ids2, lith_ids, min_ids, cc, dataset_iri, template_version)
-    grf += extract_sheet_surface_structure(wb, sample_ids2, cc, dataset_iri, template_version)
+    grf += extract_sheet_surface_lithology(wb, dataset_iri, sample_ids2, lith_ids, min_ids, cc, template_version)
+    grf += extract_sheet_surface_structure(wb, dataset_iri, sample_ids2, cc, template_version)
 
-    grf += extract_sheet_reserves_resources(wb, cc, dataset_iri, template_version)
+    grf += extract_sheet_reserves_resources(wb, dataset_iri, cc, template_version)
 
     grf.bind("bore", BORE)
     grf.bind("ex", EX)
