@@ -38,6 +38,12 @@ QLDBORES = Namespace("https://linked.data.gov.au/dataset/gsq-bores/")
 LABORATORIES = Namespace("https://linked.data.gov.au/dataset/gsq-bores/")
 
 
+class GEOCHEM(DefinedNamespace):
+    _NS = Namespace("https://linked.data.gov.au/def/geochem/")
+    ConversionReport: URIRef
+    ConversionResult: URIRef
+
+
 class TENEMENT(DefinedNamespace):
     _NS = Namespace("https://linked.data.gov.au/def/mining-tenements/")
     _fail = True

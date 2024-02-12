@@ -2,13 +2,14 @@ import argparse
 import json
 import sys
 from uuid import uuid4
+from typing import Tuple
 
 from pyproj import Transformer
 from rdflib import Namespace, Seq
-from rdflib.namespace import GEO, SSN
+from rdflib.namespace import GEO, SH, SSN
 import dateparser
 
-from .defined_namespaces import MININGROLES, TENEMENT, TENEMENTS, QLDBORES, QKINDS, GEOSAMPLE, GEOSITE, SOSAX
+from .defined_namespaces import MININGROLES, TENEMENT, TENEMENTS, QLDBORES, QKINDS, GEOSAMPLE, GEOSITE, SOSAX, GEOCHEM
 
 EX = Namespace("http://example.com/")
 
@@ -3971,7 +3972,7 @@ def make_parser(args):
 
     parser.add_argument(
         "-o",
-        "--outputfile",
+        "--output_file",
         help="An optionally-provided output file path. If not provided, output is to standard out",
         required=False,
     )
@@ -3993,7 +3994,7 @@ def make_parser(args):
     return parser.parse_args(args)
 
 
-def main(args=None):
+def cli(args=None):
     if args is None:  # run via entrypoint
         args = sys.argv[1:]
 
@@ -4013,87 +4014,63 @@ def main(args=None):
             f"Known template versions: {', '.join(sorted(KNOWN_TEMPLATE_VERSIONS, reverse=True))}"
         )
     elif args.update_workbook:
-        print("Updating template")
-        if args.file_to_convert is None:
-            raise ValueError("If you select the option '-u', you must specify an Excel file to update")
-        elif not Path(args.file_to_convert).is_file():
-            raise ValueError("Files to update must exist")
-        elif not args.file_to_convert.suffix.lower().endswith(tuple(EXCEL_FILE_ENDINGS)):
-            raise ValueError("Files to update must end in .xslx")
-
-        wb = load_workbook(args.file_to_convert)
-        template_version = get_template_version(wb)
-
-        # test that we have a valid template variable
-        from .utils import KNOWN_TEMPLATE_VERSIONS
-        if template_version not in KNOWN_TEMPLATE_VERSIONS:
-            raise ValueError(
-                f"Unknown Template Version. Known Template Versions are {', '.join(KNOWN_TEMPLATE_VERSIONS)},"
-                f" you supplied {template_version}"
-            )
-        ws = wb["VALIDATION_DICTIONARY"]
-
-        for vocab_id, vocab_path in FIELD_VOCABS.items():
-            col = VOCAB_COLUMNS[vocab_id]
-            row = 5
-            for i in make_vocab_a_list_of_notations(vocab_path):
-                ws[f"{col}{row}"] = i
-                row += 1
-
-        from openpyxl.worksheet.datavalidation import DataValidation
-        dv = DataValidation(
-            type="list",
-            formula1="=VALIDATION_DICTIONARY!$J$5:$J$13",
-            showDropDown=False
-        )
-        ws2 = wb["DRILLHOLE_SAMPLE"]
-        ws2.add_data_validation(dv)
-
-        print(create_vocab_validation_formula(wb, "VALIDATION_DICTIONARY", "DRILL_TYPE"))
-        print(create_vocab_validation_formula(wb, "DICTIONARY", "CODE"))
-
-        wb.save(Path(args.file_to_convert).with_suffix(".y.xlsx"))
+        raise NotImplementedError("This function is not yet implemented")
     elif args.file_to_convert:
-        # input file looks like an Excel file, so convert Excel -> RDF
-        if not args.file_to_convert.suffix.lower().endswith(tuple(EXCEL_FILE_ENDINGS)):
-            raise ConversionError("Only Excel files can be converted")
-        else:
-            if args.sheet is not None:
-                print("Sorry, the option to select a single sheet to process is not enabled yet")
-                exit()
-
-            wb = load_workbook(args.file_to_convert)
-            cc = Graph().parse(Path(__file__).parent.parent / "tests" / "data" / "3.0" / "concepts-combined.ttl")
-
-            if args.outputfile is not None:
-                if args.sheet is not None:
-                    if args.sheet not in SHEETS:
-                        raise ConversionError(
-                            f"The value {args.sheet} you've supplied for the sheet parameter (-s or --sheet) is not "
-                            f"in the list of known worksheets")
-                    print(f"Processing worksheet {args.sheet} only")
-
-                    try:
-                        g, dataset_iri = worksheet_to_rdf(wb, cc, sheet=args.sheet)
-                        g.base = dataset_iri + "/"
-                    except ConversionError as err:
-                        logging.error("{0}".format(err))
-                        return 1
-                else:
-                    print(f"Processing workbook {args.file_to_convert}")
-
-                    try:
-                        g, dataset_iri = workbook_to_rdf(wb, cc)
-                        g.base = dataset_iri + "/"
-                        g.serialize(destination=str(args.outputfile), format="turtle")
-                    except ConversionError as err:
-                        logging.error("{0}".format(err))
-                        return 1
+        passed, g, result_text = convert(args.file_to_convert)
+        if passed:
+            if args.output_file:
+                g.serialize(destination=args.output_file, format="turtle")
             else:
-                try:
-                    g, dataset_iri = workbook_to_rdf(wb, cc)
-                    g.base = dataset_iri + "/"
-                    print(g.serialize(format="turtle"))
-                except ConversionError as err:
-                    logging.error("{0}".format(err))
-                    return 1
+                print(g.serialize(format="turtle"))
+        else:
+            print(result_text)
+
+
+def make_text_conversion_report(g: Graph) -> str:
+    txt = """Conversion Report
+Converts: False
+Results (1):
+Conversion Violation: 
+    """
+    for s in g.subjects(RDF.type, GEOCHEM.ConversionReport):
+        for o in g.objects(s, SH.result):
+            for o2 in g.objects(o, SH.resultMessage):
+                txt += str(o2)
+
+    return txt
+
+
+def convert(
+    file_to_convert: Union[str, Path]
+) -> Tuple[bool, Graph, Union[str, None]]:
+    if not file_to_convert.suffix.lower().endswith(tuple(EXCEL_FILE_ENDINGS)):
+        raise ConversionError(f"Only Excel files can be converted. You supplied file {file_to_convert}")
+    else:
+        wb = load_workbook(file_to_convert)
+        cc = Graph().parse(Path(__file__).parent.parent / "tests" / "data" / "3.0" / "concepts-combined.ttl")
+        try:
+            g, dataset_iri = workbook_to_rdf(wb, cc)
+            g.base = dataset_iri + "/"
+            passed = True
+            text_report = None
+        except ConversionError as e:
+            g = Graph().parse(
+                data="""
+                    PREFIX geochem: <https://linked.data.gov.au/def/geochem/>
+                    PREFIX sh: <http://www.w3.org/ns/shacl#>
+                    PREFIX sosa: <http://www.w3.org/ns/sosa/>
+                    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+                    
+                    [] 
+                        a geochem:ConversionReport ;
+                        sh:result [ 
+                            a geochem:ConversionResult ;
+                            sh:resultMessage "xxx" ;
+                        ] ;
+                    .
+                    """.replace("xxx", str(e))
+            )
+            passed = False
+            text_report = make_text_conversion_report(g)
+
+        return passed, g, text_report

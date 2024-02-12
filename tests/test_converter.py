@@ -1,6 +1,6 @@
 import pytest
 
-from geochemxl.convert import *
+from geochemxl.converter import *
 
 TESTS_DIR = Path(__file__).parent
 
