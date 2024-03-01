@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "A pure Python library that converts Australian geochemistry data in Excel structured according to the GGIC geochmistry template into RDF data conforming to the Geochemistry Data Model"
 authors = ["Nicholas Car <nick@kurrawong.ai>"]
 license = "CC BY 4.0"
-readme = "README.md"
+readme = "README.adoc"
 
 [tool.poetry.dependencies]
 python = "^3.11"
