@@ -4047,7 +4047,7 @@ def convert(
         raise ConversionError(f"Only Excel files can be converted. You supplied file {file_to_convert}")
     else:
         wb = load_workbook(file_to_convert)
-        cc = Graph().parse(Path(__file__).parent.parent / "tests" / "data" / "3.0" / "concepts-combined.ttl")
+        cc = Graph().parse(Path(__file__).parent / "concepts-combined-3.0.ttl")
         try:
             g, dataset_iri = workbook_to_rdf(wb, cc)
             g.base = dataset_iri + "/"
